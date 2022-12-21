@@ -94,6 +94,8 @@ def ViewInformation(request,id, profile):
                 athlete.ClubLevel = request.POST['ClubLevel']
             if request.POST['ClubLevel']:
                 athlete.ClubLevel = request.POST['ClubLevel']  
+            if request.FILES['ProfileImage']:
+                athlete.ProfileImage=request.FILES['ProfileImage']
                 
             messages.success(request,f"Dear {Person.FirstName} your profile information has been updated successfully")
             athlete.save()
