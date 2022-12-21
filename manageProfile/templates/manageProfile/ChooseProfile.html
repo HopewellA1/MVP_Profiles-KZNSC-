@@ -1,0 +1,29 @@
+{% extends "manageProfile/base.html" %}
+
+{% block content %}
+{% load static %}
+<div class="TypesHolder">
+    <div class="row container">
+      <a href="{% url 'creatProfile' id=person profile="Athlate" %}">Athlete</a>
+        <div class="col-md-4 text-center">
+            <h3><b>Athlate<b></h3>
+                <form method="post" action="ChooseProfile"/>
+                {% csrf_token %}
+                    <input type="hidden" name="person" value="{{person}}"/>
+                    <input type="submit" value="Save"/>
+                </form>
+        </div>
+        <div class="col-md-4 text-center">
+            <h3><b>Parent<b></h3>
+        </div>
+        <div class="col-md-4 text-center">
+            <h3><b>Parent<b></h3>
+        </div>
+        <div class="col-md-4 text-center">
+            <h3><b>Parent<b></h3>
+        </div>
+    </div>
+</div>    
+
+
+{% endblock %}

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    {%load static %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="{% static 'manageProfile/images/kzn-sports-confederation-logo.png' %}" type="image/x-icon">
+    <title>KZNSC</title>
+    <!--Profile css-->
+    <link rel="stylesheet" href="{% static 'manageProfile/Profile.css' %}">
+    <!--Profile css-->
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="{% static 'manageProfile/css/style5.css' %}">
+
+    <!-- Font Awesome JS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'manageProfile/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'manageProfile/css1/style.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+
+<link rel="stylesheet" type="text/css" href="{% static 'manageProfile/css1/bootstrap.css' %}" />
+
+  <!-- fonts style -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <!-- nice selecy -->
+  
+  <link rel="stylesheet" href="{% static 'manageProfile/css1/nice-select.min.css' %}">
+
+  <!--owl slider stylesheet -->
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+
+  <!-- font awesome style -->
+  <link href="{% static 'manageProfile/css1/font-awesome.min.css' %}" rel="stylesheet" />
+
+  <!-- Custom styles for this template -->
+  <link href="{% static 'manageProfile/css1/style.css' %}" rel="stylesheet" />
+  <!-- responsive style -->
+  <link href="{% static 'manageProfile/css1/responsive.css' %}" rel="stylesheet" />
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <!-- Sidebar Holder -->
+        
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>Person System</h3>
+            </div>
+            <ul class="list-unstyled components">
+
+                <p>KZNSC Person System</p>
+                <li class="active">
+                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">My Account</a>
+                    <ul class="collapse list-unstyled" id="homeSubmenu">
+                        <!--password_change-->
+                        <li>
+                            <a href="register.html">Register</a>
+                        </li>
+                        <li>
+                            <a href="login.html">Login</a>
+                        </li>
+                        
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">My Profile</a>
+                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Clubs</a>
+                    <ul class="collapse list-unstyled" id="pageSubmenu">
+                        <li>
+                            <a href="#">Local</a>
+                        </li>
+                        <li>
+                            <a href="#">Municipaly</a>
+                        </li>
+                        <li>
+                            <a href="#">Provincial</a>
+                        </li>
+                    </ul>
+                </li>
+                
+            </ul>
+
+            <ul class="list-unstyled CTAs">
+                <li>
+                    <a href="https://kznsc.com/" class="download">KZNSC</a>
+                </li>
+                <br>
+                <li>
+                    <b>Funded By:</b><br>
+                    <img src="{% static 'manageProfile/images/sports.jpg' %}" style="width:100%;height:60%"><br>
+                    <b>Affiliated To:</b> <br>
+                    <img src="{% static 'manageProfile/images/sascoc.jpeg' %}" style="width:100%;height:5%"><br><br>
+                    <img src="{% static 'manageProfile/images/kzn-sports-confederation-logo.png' %}" style="width:100%;height:200px; background-color: white;">
+                </li>
+            </ul>
+            
+        </nav>
+
+        <!-- Page Content Holder -->
+        <div id="content">
+
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="{% url 'home' %}">
+                    <span style="color:black">
+                        <img src="{%static 'manageProfile/images/kzn-sports-confederation-logo.png' %}" class="img-circle" alt="User Image" style="width:50%;height:50%">
+                       
+                    </span>
+                </a>
+                <div class="container-fluid" style="background-color: lime;color: black;">
+
+                    <button type="button" id="sidebarCollapse" class="navbar-btn" style="background-color: lime;">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fas fa-align-justify"></i>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        {% comment %} <ul class="nav navbar-nav ml-auto"style="color: black;">
+                            <li class="nav-item active">
+                                <a class="nav-link" href="{% url 'home' %}" style="color: black;">Home</a>
+                            </li>
+                            {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                             </li>
+                              <li class="nav-item">
+                                <a class="nav-link" href="{% url 'account' %}">{{user}}</a>
+                            </li>
+                            {% else %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'register' %}" >Register</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'loginuser' %}">Login</a>
+                                </li>
+
+                            {% endif %}
+                            
+                           
+                            
+                        </ul> {% endcomment %}
+                    </div>
+                    
+                </div>
+                
+            </nav>
+            <!-- <ul style="background-color: lime;height: 20px; margin-top: 0px; box-shadow: 2px;"></ul> -->
+           
+            <br>
+            {% block content %}
+
+
+
+            {% endblock %}
+       
+<br>
+
+               <!-- info section -->
+               <ul style="background-color: lime;height: 20px;margin-bottom: 0px;"></ul>
+  <section class="info_section " style="background-color: green;height: 227px;">
+
+    <div class="container">
+      <div class="info_top ">
+        <div class="row ">
+          <div class="col-md-6 col-lg-3 info_col" style="color: white;">
+            <h4>
+               Sitemap
+              </h4>
+              <p >
+                  <i class="fa fa-home" aria-hidden="true"></i>&nbsp;
+                  <span style="color: white;">
+                      Home <br>
+                     
+                      
+                  </span>
+                  <i class="fa fa-book" aria-hidden="true"></i>&nbsp;
+                  <span style="color: white;">
+                    About Us<br>
+                  </span>
+                  <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp;
+                  <span style="color: white;">
+                    Contact Us
+                  </span>
+              </p>
+          </div>
+          <div class="col-md-6 col-lg-3 info_col ">
+            <div class="info_form">
+                <h4>
+                  Stay Connected
+                </h4>
+                
+                <div class="social_box">
+                  <a href="">
+                    <i class="fa fa-facebook" aria-hidden="true"></i>
+                  </a>
+                  <a href="">
+                    <i class="fa fa-twitter" aria-hidden="true"></i>
+                  </a>
+                  <a href="">
+                    <i class="fa fa-linkedin" aria-hidden="true"></i>
+                  </a>
+                  <a href="">
+                    <i class="fa fa-instagram" aria-hidden="true"></i>
+                  </a>
+                </div>
+              </div>
+          </div>
+          <div class="col-md-6 col-lg-3 info_col ">
+              <h4>
+                We Located at
+              </h4>
+              <p style="color: white;">
+                  <i class="fa fa-map-marker" aria-hidden="true"></i>&nbsp;
+                  <span style="color: white;">
+                      305 Musgrave Road, Durban 4001
+                  </span>
+              </p>
+          </div>
+          <div class="col-md-6 col-lg-3 info_col">
+            <h4>
+              Contact us
+            </h4>
+            
+            <div class="contact_nav">
+              <a href="">
+                <i class="fa fa-watch" aria-hidden="true"></i>&nbsp;
+                <span>
+                  80h00 am - 16h00 pm
+                </span>
+              </a>
+              <a href="">
+                <i class="fa fa-phone" aria-hidden="true"></i>&nbsp;
+                <span>
+                  Call : +27 031 001 0840
+                </span>
+              </a>
+              <a href="">
+                <i class="fa fa-envelope" aria-hidden="true"></i> &nbsp;
+                <span>
+                  Email Us: <br>kznsportsconfederation@gmail.com
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- end info_section -->
+  <!-- footer section -->
+  <footer class="footer_section" style="background-color: black;height:55px;margin-bottom:0px;width: 100%; margin-top: 10px;">
+    <div class="container" style="margin-bottom:0px">
+        <b>
+      <p style="color: white;">
+        &copy; <span id="displayYear"></span> All Rights Reserved By
+        <a href="https://kznsc.com">KWAZULU NATAL SPORTS CONFEDERATIONS</a>
+      </p>
+    </b>
+    </div>
+  </footer>
+  <!-- footer section -->
+        </div>
+    </div>
+     
+    <script src="{% static 'Login/js/main.js' %}"></script>
+    <!-- jQuery CDN - Slim version (=without AJAX) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+                $(this).toggleClass('active');
+            });
+        });
+    </script>
+    <!-- jQery -->
+  <script src="{% static 'Login/js/jquery-3.4.1.min.js' %}"></script>
+  <!-- popper js -->
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js">
+  </script>
+  <!-- nice select -->
+  <script src="{% static 'Login/js/jquery.nice-select.min.js' %}"></script>
+  <!-- bootstrap js -->
+  <script src="{% static 'Login/js/bootstrap.js' %}"></script>
+  <!-- owl slider -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js">
+  </script>
+  <!-- custom js -->
+  <script src="{% static 'Login/js/custom.js' %}"></script>
+</body>
+
+</html>

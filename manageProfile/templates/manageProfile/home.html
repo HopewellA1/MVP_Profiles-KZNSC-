@@ -1,0 +1,30 @@
+{% extends "manageProfile/base.html" %}
+
+{% block content %}
+{% load static %}
+<div class="container text-center">
+    <div>
+        <h3><b>Creating Person to create profile</b></h3>
+    </div>
+</div>
+<hr/>
+<center>
+    <div >
+        <div>
+            <p>
+                Please click below to create new Profile
+            </p>
+        </div>
+        <div>
+            <form method="post" action"home">
+                {% csrf_token %}
+                <input placeholder="Enter ID number" type="text" maxlength="13" name="IdentityNumber" id="IdentityNumber"/>
+                <input placeholder="Enter first name" type="text" name="FirstName" id="FirstName"/>
+                <input type="submit" value="Save and continue"/>
+            </form>
+        </div>
+    </div>
+</center>
+
+
+{% endblock %}
