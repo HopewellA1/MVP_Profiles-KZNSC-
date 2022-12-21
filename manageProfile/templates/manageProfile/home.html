@@ -8,6 +8,20 @@
     </div>
 </div>
 <hr/>
+{% if messages %}
+{% for message in messages %}
+  <div>
+    <center>
+        <div style="padding:1rem; background-color:green;color:white">
+          <p>
+              <h3><b>{{ message }}</b></h3>
+          </p>
+        </div>
+      </center>
+    </div>
+
+{% endfor %}
+{% endif %}
 <center>
     <div >
         <div>
@@ -16,13 +30,11 @@
             </p>
         </div>
         <div>
-            <form method="post" action"home">
-                {% csrf_token %}
-                <input placeholder="Enter ID number" type="text" maxlength="13" name="IdentityNumber" id="IdentityNumber"/>
-                <input placeholder="Enter first name" type="text" name="FirstName" id="FirstName"/>
-                <input type="submit" value="Save and continue"/>
-            </form>
+            <a href="{% url 'personal' id=0 %}">Start</a>
+      
+           
         </div>
+     
     </div>
 </center>
 

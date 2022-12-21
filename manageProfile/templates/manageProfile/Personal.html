@@ -1,0 +1,55 @@
+{% extends "manageProfile/base.html" %}
+
+{% block content %}
+{% load static %}
+<div class="container text-center">
+    <div>
+        <h3><b>Creating Person to create profile</b></h3>
+    </div>
+</div>
+<hr/>
+{% if messages %}
+{% for message in messages %}
+  <div>
+    <center>
+        <div style="padding:1rem; background-color:green;color:white">
+          <p>
+              <h3><b>{{ message }}</b></h3>
+          </p>
+        </div>
+      </center>
+    </div>
+
+{% endfor %}
+{% endif %}
+<center>
+    <div >
+        <div>
+            <p>
+                Please click below to create new Profile
+            </p>
+        </div>
+        <div>
+            <form method="post" action"home">
+                {% csrf_token %}
+                <input placeholder="Enter ID number" type="text" maxlength="13" name="IdentityNumber" id="IdentityNumber"/>
+                <input placeholder="Enter first name" type="text" name="FirstName" id="FirstName"/>
+                <input type="submit" value="Save and continue"/>
+                <input type="hidden"
+                 {% if parent %}
+                    value="parent"
+                 {% endif %}
+                 name="parent"/>
+
+                 <input type="hidden"
+                 {% if ParentPerson %}
+                    value="ParentPerson"
+                 {% endif %}
+                 name="parent"/>
+            </form>
+        </div>
+    </div>
+</center>
+
+
+{% endblock %}
