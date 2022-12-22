@@ -20,7 +20,7 @@
           {% endif %}
             <div class="card-body p-4 p-md-5">
               <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Athlate Registration Form</h3>
-              <form method="POST" action"" enctype="multipart/form-data">
+              <form method="POST" action="creatProfile" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="row">
                   <div class="col-md-6 mb-4">
@@ -41,7 +41,7 @@
                         <select required name="Federation" class="form-control form-control-lg" style="display:flex;justify-centent:center">
                             <!--Federation will be pulled fron the database once funtionality is implemented-->
                             <option style="width:100%" value="Aquatics"><b>Aquatics</b></option>
-                            <option value="Chess"><b>CHess</b></option>
+                            <option value="Chess"><b>Chess</b></option>
                         </select>
                        
                       <label class="form-label" for="Federation">Federation</label>
@@ -51,7 +51,7 @@
                 </div>
                 <input type="hidden" 
                 {% if parent %}
-                    value="parent"
+                    value="{{parent}}"
                 {% endif %}
                 name="parent"/>
               

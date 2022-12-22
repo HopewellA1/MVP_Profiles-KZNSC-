@@ -55,7 +55,7 @@
                   <div class="form-outline" style="display:flex;flex-direction: column">
                       <select  name="Federation" class="form-control form-control-lg" style="display:flex;justify-centent:center">
                           <!--Federation will be pulled fron the database once funtionality is implemented-->
-                          
+                          <option style="width:100%" value="Select"><b>Select</b></option>
                           
                           <option style="width:100%" value="Aquatics"><b>Aquatics</b></option>
                           <option check value="Chess"><b>Chess</b></option>
@@ -73,7 +73,7 @@
 
                   <div class="form-outline">
         
-                    <input type="text" value="{{profile.PlayerType}}" name="PlayerType" placeholder="Player type" class="form-control form-control-lg" required/>
+                    <input type="text"  name="PlayerType" placeholder="{{profile.PlayerType}}" class="form-control form-control-lg" />
                     <label class="form-label" for="PlayerType">Player type</label>
                   </div>
 
@@ -81,7 +81,7 @@
                 <div class="col-md-6 mb-4 pb-2">
 
                   <div class="form-outline">
-                      <input type="number" value="{{profile.AthleteLevel}}" name="AthleteLevel" placeholder="Athlete Level" required class="form-control form-control-lg"/>
+                      <input type="number" name="AthleteLevel" placeholder="{{profile.AthleteLevel}}"  class="form-control form-control-lg"/>
                    
                     <label class="form-label" for="AthleteLevel">Athlete Level</label>
                   </div>
@@ -93,7 +93,7 @@
                   <div class="col-md-6 mb-4 pb-2">
   
                     <div class="form-outline">
-                      <input value="{{profile.ClubName}}" type="text" name="ClubName" class="form-control form-control-lg" placeholder="Club Name"  required/>
+                      <input type="text" name="ClubName" class="form-control form-control-lg" placeholder="{{profile.ClubName}}"  />
                       <label class="form-label" for="ClubName">Club Name</label>
                     </div>
   
@@ -101,7 +101,7 @@
                   <div class="col-md-6 mb-4 pb-2">
   
                     <div class="form-outline">
-                      <input type="number" value="{{profile.ClubLevel}}"name="ClubLevel" placeholder="Club level"  class="form-control form-control-lg" required/>
+                      <input type="number" name="ClubLevel" placeholder="{{profile.ClubLevel}}"  class="form-control form-control-lg" />
             
 
                       <label class="form-label" for="ClubLevel">Club level</label>

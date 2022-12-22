@@ -1,0 +1,60 @@
+{% extends "manageProfile/base.html" %}
+
+{% block content %}
+{% load static %}
+
+{% if messages %}
+{% for message in messages %}
+  <div>
+    <center>
+        <div style="padding:1rem; background-color:green;color:white">
+          <p>
+              <h3><b>{{ message }}</b></h3>
+          </p>
+        </div>
+      </center>
+    </div>
+
+{% endfor %}
+{% endif %}
+
+<!---->
+<div>
+    <div  style="border:solid">
+        
+       <center>
+
+        <div>
+            <img src="{{ParentProfile.ProfileImage.url}}" style="width:350px;height:350px"/>  
+        </div>
+        <div>
+            {{type}}
+        </div>
+        <div>
+            <h3><b>{{ParentPerson.FirstName}}
+        </div>
+
+
+       </center>
+    </div>
+   <hr/>
+    <div style="border:solid 1px;">
+            <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Athlets under your profile</h3>
+            <hr/>
+            <div style="overflow:hodden; overflow-y:scroll; overflow-y auto;overflow-x:hidden;widh:100%">
+                {%  %}
+
+
+                {%  %}
+
+            </div>
+           
+    </div>
+   
+
+
+</div>
+
+
+
+{% endblock %}

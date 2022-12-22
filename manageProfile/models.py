@@ -3,6 +3,7 @@ from django.db import models
 from tkinter import CASCADE
 from turtle import position
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Persons(models.Model):
@@ -10,6 +11,7 @@ class Persons(models.Model):
     IdentityNumber = models.CharField(null=False, max_length=13,unique=True)
     FirstName = models.TextField()
     NumProfile= models.IntegerField(default=0)
+    user = models.ForeignKey(User,on_delete=models.CASCADE,blank=True,null=True)
 
 
 class Parent(models.Model):

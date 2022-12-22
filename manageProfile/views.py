@@ -3,24 +3,30 @@ from django.shortcuts import render,redirect,get_object_or_404
 from .models import Athlete,Persons,Parent
 from django.utils.dateparse import parse_date
 from datetime import date, datetime
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def personal(request, id):
+    user = request.user
     if request.method == 'GET':
         return render(request,'manageProfile/Personal.html', {"parent": id})
     if request.method == 'POST':
-        Person = Persons.objects.create(IdentityNumber = request.POST['IdentityNumber'],FirstName = request.POST['FirstName'])
-        p = Persons.objects.get(IdentityNumber = Person.IdentityNumber)
         
-        print(p.personId)
+        
+       
         if id != "0":
+            Person = Persons.objects.create(IdentityNumber = request.POST['IdentityNumber'],FirstName = request.POST['FirstName'])
+            p = Persons.objects.get(IdentityNumber = Person.IdentityNumber)
             ParentPerson = get_object_or_404(Persons, pk = id)
             
             #parent = get_object_or_404(Parent, personId = Person)
             messages.success(request,f"Dear { ParentPerson.FirstName}, Athlate personal information saved successfully please continue adding the required information below")
             return redirect('creatProfile', id=p.personId, profile="Parent",parent=ParentPerson.personId)
+        else:
+            Person = Persons.objects.create(IdentityNumber = request.POST['IdentityNumber'],FirstName = request.POST['FirstName'], user = user)
+            p = Persons.objects.get(IdentityNumber = Person.IdentityNumber)
             
-            
-        return render(request, 'manageProfile/ChooseProfile.html',{"person": p.personId})
+            return render(request, 'manageProfile/ChooseProfile.html',{"person": p.personId})
 
 def home(request):
 
@@ -48,10 +54,10 @@ def chooseProfile(request):
         Person = get_object_or_404(Persons, pk = request.POST['person'])
         return redirect('creatProfile', id=Person.personId, profile="Athlate")
        # return render(request, 'manageProfile/CreateProfile.html',{"person": Person.personId})
-
+@login_required
 def creatProfile(request,id, profile, parent):
     prof =''
-    
+     
     if request.method =="GET":
         try:
             #if a person alredy has that profile we will let them know
@@ -64,13 +70,15 @@ def creatProfile(request,id, profile, parent):
             # if they don't have any of the above we let them continue to create
             pass
 
-        return render(request, 'manageProfile/CreateProfile.html',{"profile":prof, "parent":prof})
+        return render(request, 'manageProfile/CreateProfile.html',{"profile":prof, "parent":parent})
     if request.method=='POST':
         
         #creating athlate instance
         ProfDefault = False
         if profile =="Parent":
             pass
+        else:
+            parent = "0"
         Person = get_object_or_404(Persons, pk = id)
         if Person.NumProfile == 0:
            ProfDefault = True
@@ -90,7 +98,7 @@ def creatProfile(request,id, profile, parent):
                                          )
         if parent !="0":
             Ath =get_object_or_404(Athlete,personId = Person)
-            ParentPerson = get_object_or_404(Persons, pk = parent)
+            ParentPerson = get_object_or_404(Persons, pk = request.POST["parent"])
             AthlateParent = get_object_or_404(Parent, personId = ParentPerson)
             Ath.ParentId = AthlateParent
             Ath.save()
@@ -109,10 +117,7 @@ def creatProfile(request,id, profile, parent):
        # return render(request, 'manageProfile/CreateProfile.html',{"profile":prof})
 
 
-
-
-
-
+@login_required
 def ParentInfo(request,id ):
     Person = get_object_or_404(Persons, pk = id)
     try:
@@ -141,7 +146,7 @@ def ParentInfo(request,id ):
                                          )
         Person.NumProfile += 1
         Person.save()
-        #messages.success(f"Dear {Person.FirstName} please add your athlate personal information")
+        messages.success(request,f"Dear {Person.FirstName} please add your athlate personal information")
         #return render(request,'manageProfile/home.html',{"parent":parent, "ParentPerson":Person.personId})
         #return redirect('creatProfile', id=Person.personId, profile="Parent")
         return redirect('personal', id=Person.personId)
@@ -154,9 +159,9 @@ def ParentInfo(request,id ):
     
     
     
-    
+@login_required    
 def ViewInformation(request,id, profile):
-    print(f"The prifile type is:{profile} on normal")
+ 
     prof =profile
     t = profile
     Person = get_object_or_404(Persons, pk = id)
@@ -166,37 +171,90 @@ def ViewInformation(request,id, profile):
         prof = get_object_or_404(Athlete,pk = Athlete.objects.get(personId = Person).AthleteID)
     
     if request.method == 'GET':
-        print(f"The prifile type is:{profile} on Get")
+   
         return render(request, 'manageProfile/ViewInfo.html',{"person":Person, "profile":prof,"type":profile})
     if request.method =='POST':
-        print(f"The prifile type is:{t} on Post")
+       
         if request.POST["profiletype"] =="Athlate":
-            
+            NumUpdate = 0
             athlete = get_object_or_404(Athlete,personId= Person)
-            print(f"The new Atthlate is now: {athlete}")
+          
            # athlete = Athlete.objects.get(personId = Person)
             if request.POST['Federation']:
-                athlete.Federation = request.POST['Federation']
+                if request.POST['Federation'] ==  "Select":
+                    pass
+                else:
+                    athlete.Federation = request.POST['Federation']
+                    NumUpdate += 1
             if request.POST['AthleteLevel']:
                 athlete.AthleteLevel = request.POST['AthleteLevel']
+                NumUpdate += 1
             if request.POST['ClubName']:
                 athlete.ClubName = request.POST['ClubName']
+                NumUpdate += 1
             if request.POST['ClubLevel']:
                 athlete.ClubLevel = request.POST['ClubLevel']
+                NumUpdate += 1
             if request.POST['ClubLevel']:
-                athlete.ClubLevel = request.POST['ClubLevel']  
-            if request.FILES['ProfileImage']:
-                athlete.ProfileImage=request.FILES['ProfileImage']
+                athlete.ClubLevel = request.POST['ClubLevel']
+                NumUpdate += 1 
+            
+            if request.POST['PlayerType']:
+                athlete.PlayerType = request.POST['PlayerType']
+                NumUpdate += 1  
+            try:
+                if request.FILES['ProfileImage']:
+                    athlete.ProfileImage=request.FILES['ProfileImage']
+                    NumUpdate += 1    
+            except:
+                pass
+            
+            if NumUpdate >0:
+                print(f"\n\nNumber of updates made: {NumUpdate} \n\n")
+                messages.success(request,f"Profile information has been updated successfully")
                 
-            messages.success(request,f"Dear {Person.FirstName} your profile information has been updated successfully")
-            athlete.save()
+                athlete.save()
+            else:
+                messages.success(request,f"Dear {Person.FirstName} you did not make any changes on your profile")
+                
             return redirect('ViewInformation', id=Person.personId, profile="Athlate")
            
         return render(request, 'manageProfile/ViewInfo.html',{"person":Person, "profile":prof,"type":profile})
 
 
-
-
-
-
+#the following Action method get the parent profile for the curent user if they have a parent profile.
+@login_required
+def viewParent(request):
+    
+    if request.method == 'GET':
+        Athletes = []
+        user = request.user
+        personalinfo = get_object_or_404(Persons, user = user)
+        if personalinfo.NumProfile >1:
+            #get all the profiles belonging to that person
+            pass
+        print(personalinfo)
+        parentProfile = get_object_or_404(Parent,personId = personalinfo)
+        athleteProfiles = Athlete.objects.get(ParentId = parentProfile)
+        # For the for statement we need to call an internal api for getting the athlets by parent id if posible
+        for athlete in athleteProfiles:
+            
+            athletePersonalInfo = get_object_or_404(Persons, pk = athlete.personId)
+            athleteView = {
+                "FirstName": athletePersonalInfo.FirstName,
+                "ProfileImage": athlete.ProfileImage,
+                "PersonId":athletePersonalInfo.personId,
+                
+            }
+            Athletes.append(athleteView)
+            
+        print(
+            "The profiles associated with parent are as follows.\n\n"
+            +f"Current user: {user}\n Perent personal Info: {personalinfo.FirstName}"
+            +f"\nAthlets under the parent: {Athletes}"
+        )
+        return render(request, 'manageProfile/viewParent.html',
+                      {"ParentPerson":personalinfo, "ParentProfile": parentProfile, "Athlets": Athletes})
+    
+    
 
