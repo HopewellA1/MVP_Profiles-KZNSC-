@@ -8,7 +8,7 @@ urlpatterns = [
    path('creatProfile/<id>/<profile>/<parent>',views.creatProfile, name="creatProfile"),
    path('ViewInformation/<id>/<profile>',views.ViewInformation , name="ViewInformation"),
    path('ParentInfo/<id>',views.ParentInfo , name="ParentInfo"),
-   path('viewParent', views.viewParent, name="viewParent")
+   path('viewPerson/<default>', views.viewPerson, name="viewPerson")
    
    
 ]

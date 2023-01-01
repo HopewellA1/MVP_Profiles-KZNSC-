@@ -1,14 +1,27 @@
+import json
 from django.contrib import messages
-from django.shortcuts import render,redirect,get_object_or_404
+from django.shortcuts import render,redirect,get_object_or_404,HttpResponse
 from .models import Athlete,Persons,Parent
 from django.utils.dateparse import parse_date
 from datetime import date, datetime
 from django.contrib.auth.decorators import login_required
+from .serialization import Serializationclass
+from rest_framework import generics,filters#,viewsets
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 @login_required
 def personal(request, id):
     user = request.user
     if request.method == 'GET':
+        try:
+            person = get_object_or_404(Persons, user = user)
+            p = Persons.objects.get(IdentityNumber = person.IdentityNumber)
+            
+            return render(request, 'manageProfile/ChooseProfile.html',{"person": p.personId})
+            
+        except:
+            pass
         return render(request,'manageProfile/Personal.html', {"parent": id})
     if request.method == 'POST':
         
@@ -163,19 +176,20 @@ def ParentInfo(request,id ):
 def ViewInformation(request,id, profile):
  
     prof =profile
-    t = profile
+  
     Person = get_object_or_404(Persons, pk = id)
     
     if profile =="Athlate":
+        pass
      
-        prof = get_object_or_404(Athlete,pk = Athlete.objects.get(personId = Person).AthleteID)
+    prof = get_object_or_404(Athlete,pk = Athlete.objects.get(personId = Person).AthleteID)
     
     if request.method == 'GET':
    
         return render(request, 'manageProfile/ViewInfo.html',{"person":Person, "profile":prof,"type":profile})
     if request.method =='POST':
        
-        if request.POST["profiletype"] =="Athlate":
+        #if request.POST["profiletype"] =="Athlate":
             NumUpdate = 0
             athlete = get_object_or_404(Athlete,personId= Person)
           
@@ -208,53 +222,127 @@ def ViewInformation(request,id, profile):
                     NumUpdate += 1    
             except:
                 pass
-            
+            name =""
+            if request.POST["profiletype"] =="Parent":
+           
+                name  = athlete.ParentId.personId.FirstName
+            if request.POST["profiletype"] =="Athlete":
+                if NumUpdate == 0:
+                    name = Person.FirstName
+                else:
+                    name = f"{Person.FirstName} your"
             if NumUpdate >0:
                 print(f"\n\nNumber of updates made: {NumUpdate} \n\n")
-                messages.success(request,f"Profile information has been updated successfully")
+                messages.success(request,f"Dear {name} profile information has been updated successfully")
                 
                 athlete.save()
             else:
-                messages.success(request,f"Dear {Person.FirstName} you did not make any changes on your profile")
+                messages.success(request,f"Dear {name} you did not make any changes to the profile")
                 
-            return redirect('ViewInformation', id=Person.personId, profile="Athlate")
+            return redirect('ViewInformation', id=Person.personId, profile=request.POST["profiletype"])
            
-        return render(request, 'manageProfile/ViewInfo.html',{"person":Person, "profile":prof,"type":profile})
+        #return render(request, 'manageProfile/ViewInfo.html',{"person":Person, "profile":prof,"type":profile})
 
 
 #the following Action method get the parent profile for the curent user if they have a parent profile.
 @login_required
-def viewParent(request):
+def viewPerson(request, default = "none"):
     
     if request.method == 'GET':
         Athletes = []
+        Default = ""
         user = request.user
+        allPersonProfiles = []
         personalinfo = get_object_or_404(Persons, user = user)
-        if personalinfo.NumProfile >1:
-            #get all the profiles belonging to that person
-            pass
-        print(personalinfo)
-        parentProfile = get_object_or_404(Parent,personId = personalinfo)
-        athleteProfiles = Athlete.objects.get(ParentId = parentProfile)
-        # For the for statement we need to call an internal api for getting the athlets by parent id if posible
-        for athlete in athleteProfiles:
+       
+        # getting all profile belonging to the person using try 
+        try:
+            #starting with parent profile
+            parentProfile = get_object_or_404(Parent,personId = personalinfo)
+            athleteProfiles = Athlete.objects.all()
+            for athlete in athleteProfiles:
+           
+                pass
+                # athletePersonalInfo = get_object_or_404(Persons, pk = athlete.personId)
             
-            athletePersonalInfo = get_object_or_404(Persons, pk = athlete.personId)
-            athleteView = {
-                "FirstName": athletePersonalInfo.FirstName,
-                "ProfileImage": athlete.ProfileImage,
-                "PersonId":athletePersonalInfo.personId,
+                if athlete.ParentId == parentProfile:
+                    #AthPerson = get_object_or_404(Persons,personId= athlete.personId)
+                    athleteView = {
+                    "FirstName": athlete.personId.FirstName,
+                    "ProfileImage": athlete.ProfileImage,
+                    "PersonId":athlete.personId.personId,
+                    
+                }
+                    Athletes.append(athleteView)
+            
+            
+       
+         
+            if parentProfile.Default == True:
+                DefaultProfile = parentProfile
+                Default = "Parent"
                 
-            }
-            Athletes.append(athleteView)
+                
+            pr = { "type": "Parent",
+                    "Default": parentProfile.Default,
+                    "pl":parentProfile
+                  }
             
-        print(
-            "The profiles associated with parent are as follows.\n\n"
-            +f"Current user: {user}\n Perent personal Info: {personalinfo.FirstName}"
-            +f"\nAthlets under the parent: {Athletes}"
-        )
-        return render(request, 'manageProfile/viewParent.html',
-                      {"ParentPerson":personalinfo, "ParentProfile": parentProfile, "Athlets": Athletes})
+            allPersonProfiles.append(pr)
+            
+            
+        except:
+       
+            pass
+        
+        try:
+            
+            #up next is the Athlete profile
+            athletetProfile = get_object_or_404(Athlete,personId = personalinfo)
+            if athletetProfile.Default == True:
+                DefaultProfile = athletetProfile
+                Default = "Athlete"
+            pr = { "type": "Athlete",
+                    "Default": athletetProfile.Default,
+                    "pl":athletetProfile
+                  }
+            allPersonProfiles.append(pr)
+       
+            pass
+        except:
+            pass
+        
+        for item in allPersonProfiles:
+            print(item["type"] + "\n\n")
+         
+            if item["type"] == default:
+                print(item)
+                return render(request, 'manageProfile/viewPerson.html',
+                    {
+                         "Person":personalinfo,
+                         "DefaultProfile": item["pl"],
+                         "Athlets": Athletes,
+                         "Default":default,
+                         "allPersonProfiles":allPersonProfiles
+                      
+                         
+                    }) 
+                
+                
+        return render(request, 'manageProfile/viewPerson.html',
+                        {"Person":personalinfo,
+                         "DefaultProfile": DefaultProfile,
+                         "Athlets": Athletes,
+                         "Default":Default,
+                         "allPersonProfiles":allPersonProfiles,
+                      
+                         
+                         })
+       
+            
+     
+       
     
     
+
 

@@ -1,0 +1,248 @@
+{% extends "manageProfile/base.html" %}
+
+{% block content %}
+{% load static %}
+<!--Note the "DefaultProfile" stands for the currently viewed profile or the default if none selected-->
+{% if messages %}
+{% for message in messages %}
+  <div>
+    <center>
+        <div style="padding:1rem; background-color:green;color:white">
+          <p>
+              <h3><b>{{ message }}</b></h3>
+          </p>
+        </div>
+      </center>
+    </div>
+
+{% endfor %}
+{% endif %}
+
+<!---->
+
+    <div class="row container"  style="border:solid;padding:3rem">
+        
+      
+        <!--front end responsiveness needed
+        width:99.9%(small screen)
+        width:35%(big screen)
+        just suggestion
+        -->
+        <div class="col-md-4" style="border:solid 1px;widh:20p%">
+
+   
+
+                <img src="{{DefaultProfile.ProfileImage.url}}" style="padding:5px;width:inherit"/>  
+                <div>
+                    <h3><b>{{Person.FirstName}} ({{Default}})
+                </div>
+            
+            <div>
+                Your Profiles:{% for item in allPersonProfiles %}
+    
+                        <a href="{% url 'viewPerson' default=item.type %}">
+                        
+                            <b style="padding:2px">
+                                {{item.type }}
+                                
+                                {% if item.Default == True %}
+                                    <label>(default) </label>
+                                {% endif %}/
+    
+    
+                            </b>
+    
+                        </a>
+    
+    
+                                        
+                              
+                {% endfor %}
+            </div>
+            
+               
+                
+    
+    
+          
+           <label>Join date: {{DefaultProfile.JoinDate}}</label>
+
+        
+        
+        
+        </div >
+        
+            <div class="card-body p-4 p-md-5 container" style="width:100%;padding:5px">
+               <div style="border:solid 1px;padding:5px;width:100%">
+                    {% if Default == "Athlete" %}
+                    <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Now viewing athlate profile</h3>
+                    <form method="POST" action="ViewInformation" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    
+                    <input type="hidden" name="profiletype" value="{{type}}"/>
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+
+                        <div class="form-outline">
+                            <label class="form-label" for="Federation">Federation:</label>
+                        </div>
+
+                        </div>
+
+                        <input type="hidden" name="person" value="{{Person}}"/>
+                    
+                        <div class="col-md-6 mb-4">
+
+                        <div class="form-outline" style="display:flex;flex-direction: column">
+                            <input type="text"  name="Federation" placeholder="{{DefaultProfile.Federation}}" disabled class="form-control form-control-lg" />
+                            
+                           
+                        </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+
+                        <div class="form-outline">
+                            <label class="form-label" for="PlayerType">Player type:</label>
+                        </div>
+
+                        </div>
+
+                        
+                    
+                        <div class="col-md-6 mb-4">
+
+                        <div class="form-outline" style="display:flex;flex-direction: column">
+                            <input type="text" disabled name="PlayerType" placeholder="{{DefaultProfile.PlayerType}}" disabled class="form-control form-control-lg" />
+                            
+                           
+                        </div>
+
+                        </div>
+                    </div>
+
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-4 pb-2">
+
+                        <div class="form-outline">
+                
+                            
+                            
+                            <label class="form-label" for="AthleteLevel">Athlete Level</label>
+                        </div>
+
+                        </div>
+                        <div class="col-md-6 mb-4 pb-2">
+
+                        <div class="form-outline">
+                            <input type="number" disabled name="AthleteLevel" placeholder="{{DefaultProfile.AthleteLevel}}"  class="form-control form-control-lg"/>
+                        
+                            
+                        </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4 pb-2">
+
+                        <div class="form-outline">
+                
+                            
+                            
+                            <label class="form-label" for="ClubName">Club Name</label>
+                        </div>
+
+                        </div>
+                        <div class="col-md-6 mb-4 pb-2">
+
+                        <div class="form-outline">
+                            <input type="number" disabled name="ClubName" placeholder="{{DefaultProfile.ClubName}}"  class="form-control form-control-lg"/>
+                        
+                            
+                        </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4 pb-2">
+        
+                            <div class="form-outline">
+                           
+                                <label class="form-label" for="ClubLevel">Club level</label>
+                            </div>
+        
+                        </div>
+                        <div class="col-md-6 mb-4 pb-2">
+        
+                            <div class="form-outline">
+                            <input type="number" disabled name="ClubLevel" placeholder="{{DefaultProfile.ClubLevel}}"  class="form-control form-control-lg" />
+                    
+
+                            </div>
+        
+                        </div>
+                        </div>
+
+                    <div class="mt-2 pt-2">
+                       
+                        <a href="{% url 'ViewInformation' id=DefaultProfile.personId.personId profile="Athlete" %}" class="btn btn-primary btn-lg" type="submit"  style="width:100%" >Edit</a>       
+                        {% comment %}
+                        
+
+                        <form action="?" method="POST">
+                        <div class="g-recaptcha" data-sitekey="1"></div>
+                        <br/>
+                        <input type="submit" value="Submit">
+                        </form> {% endcomment %}
+                    </div>
+
+                    </form>
+                    {% endif %}
+               </div>
+            </div>
+        
+     
+
+    </div>
+<div>
+    {% if Default == "Parent" %}
+    <hr/>
+        <div style="border:solid 1px;">
+                <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Athlets under your profile</h3>
+                <hr/>
+                <div style="overflow:hodden; overflow-y:scroll; overflow-y auto;overflow-x:hidden;widh:100%; ">
+                    
+                    {% for item in Athlets %}
+                    <center style="padding:3px">
+                        <div style="width:98%; height:60px;border:solid;display:flex;flex-directio:raw;">
+                            <img src="{{item.ProfileImage.url}}" style="width:100px;height:inherit;height:90%"/>
+                            <div style="height:0%; width:5%">
+                            </div>
+                            <h4><b>{{item.FirstName}}</b></h4>
+                            <div style="height:0%; width:60%">
+                            </div>
+                            <a href="{% url 'ViewInformation' id=item.PersonId profile="Parent" %}">View</a>
+                            
+                        </div>
+                    
+                    </center>
+                    {% endfor  %}
+
+                </div>
+            
+        </div>
+    
+    {% endif %}
+
+</div>
+
+
+
+{% endblock %}
