@@ -8,7 +8,13 @@ urlpatterns = [
    path('creatProfile/<id>/<profile>/<parent>',views.creatProfile, name="creatProfile"),
    path('ViewInformation/<id>/<profile>',views.ViewInformation , name="ViewInformation"),
    path('ParentInfo/<id>',views.ParentInfo , name="ParentInfo"),
-   path('viewPerson/<default>', views.viewPerson, name="viewPerson")
+   path('viewPerson/<default>/<AtheId>', views.viewPerson, name="viewPerson"),
+   #
+   path('CreateCoach/<id>', views.CreateCoach, name="CreateCoach"),
    
+   path('updateCoach/<PersonId>/<CoachId>',views.updateCoach,name="updateCoach"),
+   
+   path('updateParent/<parentId>',views.updateParent, name="updateParent"),
+   path('remove/<profId>/<type>',views.remove,name="remove")
    
 ]

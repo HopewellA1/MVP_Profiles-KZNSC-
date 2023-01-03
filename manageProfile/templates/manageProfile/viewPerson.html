@@ -40,7 +40,7 @@
             <div>
                 Your Profiles:{% for item in allPersonProfiles %}
     
-                        <a href="{% url 'viewPerson' default=item.type %}">
+                        <a href="{% url 'viewPerson' default=item.type AtheId=0 %}">
                         
                             <b style="padding:2px">
                                 {{item.type }}
@@ -59,21 +59,29 @@
                               
                 {% endfor %}
             </div>
-            
-               
-                
-    
-    
-          
+
            <label>Join date: {{DefaultProfile.JoinDate}}</label>
 
-        
-        
-        
         </div >
         
             <div class="card-body p-4 p-md-5 container" style="width:100%;padding:5px">
                <div style="border:solid 1px;padding:5px;width:100%">
+
+
+                {% if Default == "Parent" %}
+
+                <center>
+
+                    <a href="{% url 'updateParent' parentId=DefaultProfile.ParentId %}" class="btn btn-primary btn-lg" type="submit"  style="width:100%" >Edit</a>       
+                
+                </center>
+                    
+
+
+                {% endif %}
+
+
+
                     {% if Default == "Athlete" %}
                     <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Now viewing athlate profile</h3>
                     <form method="POST" action="ViewInformation" enctype="multipart/form-data">
@@ -193,6 +201,7 @@
                     <div class="mt-2 pt-2">
                        
                         <a href="{% url 'ViewInformation' id=DefaultProfile.personId.personId profile="Athlete" %}" class="btn btn-primary btn-lg" type="submit"  style="width:100%" >Edit</a>       
+                       
                         {% comment %}
                         
 
@@ -204,6 +213,78 @@
                     </div>
 
                     </form>
+                    {% endif %}
+
+
+
+
+
+                    {% if Default == "Coach" %}
+                    <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Now viewing coach profile</h3>
+                    <form method="POST" action="CreateCoach" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                          <div class="col-md-6 mb-4">
+          
+                            <div class="form-outline">
+                            
+                             <input type="file" disabled value="{{ DefaultProfile.ProfileImage }}" name="ProfileImage" accept="image/*"  id="id_ProfileImage" class="form-control form-control-lg">
+                              <label class="form-label" for="ProfileImage">Profile Image</label>
+                            </div>
+          
+                          </div>
+        
+                          <input type="hidden" name="person" value="{{person}}"/>
+                         
+                          <div class="col-md-6 mb-4">
+          
+                            <div class="form-outline" style="display:flex;flex-direction: column">
+                                <select disabled required name="Federation" class="form-control form-control-lg" style="display:flex;justify-centent:center">
+                                    <!--Federation will be pulled fron the database once funtionality is implemented-->
+                                    <option style="width:100%" value="Aquatics"><b>{{ DefaultProfile.Federation }}</b></option>
+                                    <option value="Chess"><b>Chess</b></option>
+                                </select>
+                               
+                              <label class="form-label" for="Federation">Federation</label>
+                            </div>
+          
+                          </div>
+                        </div>
+                        
+                      
+                      
+          
+                        <div class="row">
+                            <div class="col-md-6 mb-4 pb-2">
+            
+                              <div class="form-outline">
+                                <input type="text" name="ClubName" disabled value="{{DefaultProfile.ClubName}}" class="form-control form-control-lg" placeholder="Club Name"  required/>
+                                <label class="form-label" for="ClubName">Club Name</label>
+                              </div>
+            
+                            </div>
+                            <div class="col-md-6 mb-4 pb-2">
+            
+                              <div class="form-outline">
+                                <input type="text" disabled value="{{DefaultProfile.CoachLevel}}" name="CoachLevel" placeholder="Coach Level"  class="form-control form-control-lg" required/>
+                      
+        
+                                <label class="form-label" for="CoachLevel">Coach Level</label>
+                              </div>
+            
+                            </div>
+                          </div>
+          
+                        <div class="mt-2 pt-2">
+                            <a href="{% url 'updateCoach' PersonId=DefaultProfile.personId.personId CoachId=DefaultProfile.CoachID %}" class="btn btn-primary btn-lg" type="submit"  style="width:100%" >Edit</a>  
+                          {% comment %} <form action="?" method="POST">
+                            <div class="g-recaptcha" data-sitekey="1"></div>
+                            <br/>
+                            <input type="submit" value="Submit">
+                          </form> {% endcomment %}
+                        </div>
+          
+                      </form>
                     {% endif %}
                </div>
             </div>
@@ -228,8 +309,8 @@
                             <h4><b>{{item.FirstName}}</b></h4>
                             <div style="height:0%; width:60%">
                             </div>
-                            <a href="{% url 'ViewInformation' id=item.PersonId profile="Parent" %}">View</a>
-                            
+                            <a href="{% url 'ViewInformation' id=item.PersonId profile="Athlete" %}">Edit</a>
+                            <a href="{% url 'viewPerson' default="ParentAthlete" AtheId=item.profile.AthleteID %}">View</a>
                         </div>
                     
                     </center>

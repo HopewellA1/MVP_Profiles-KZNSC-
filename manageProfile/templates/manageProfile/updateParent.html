@@ -1,0 +1,118 @@
+
+
+
+
+
+
+
+
+
+
+
+
+{% extends "manageProfile/base.html" %}
+
+{% block content %}
+{% load static %}
+{% if messages %}
+{% for message in messages %}
+  <div>
+    <center>
+        <div style="padding:1rem; background-color:green;color:white">
+          <p>
+              <h3><b>{{ message }}</b></h3>
+          </p>
+        </div>
+      </center>
+    </div>
+
+{% endfor %}
+{% endif %}
+<div class="raw" style="display:flex;flex-direction:raw">
+    <div class="col-md-4">
+        
+        <div>
+            <img src="{{parentProfile.ProfileImage.url}}" style="width:350px;height:350px"/>  
+        </div>
+        <div>
+            <h3><b>{{parentPerson.FirstName}}
+        </div>
+        <div>
+            {{type}}
+        </div>
+    </div>
+   
+    <div class="card-body p-4 p-md-5" style="width:80%;border:solid 1px">
+           <div style="color:green">
+            <center >
+              <h3  class="mb-4 pb-2 pb-md-0 mb-md-5">Parent Update Form</h3>
+             </center>
+           </div>
+           <form method="POST" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+           
+       
+                <div >
+                    <center>
+    
+                     
+                      
+                       <input type="file" name="ProfileImage" accept="image/*"  id="id_ProfileImage" class="form-control form-control-lg" style="width:100%">
+                        <label class="form-label" for="ProfileImage">Profile Image</label>
+                  
+    
+                    </center>
+  
+                    <center>
+
+                        {% if parentProfile.Default == True %}
+                      
+                       
+                        {% else %}
+                        <input type="checkbox" name="Default" id="id_Default" ><label class="vCheckboxLabel" for="id_Default">Make Default</label>
+                       
+                        
+                        {% endif %}
+                   
+                    </center>
+                   
+                   
+                </div>
+                  
+                
+            
+             
+              
+         
+
+            <div class="mt-2 pt-2">
+                
+                <input style="width:100%" class="btn btn-primary btn-lg" type="submit" value="Save and Continue" />
+                {% if parentPerson.NumProfile > 1%}
+                    <br/>
+                    <br/>
+                
+                    <a href="{% url 'remove' profId=parentProfile.ParentId type="Parent" %}" style="width:100%;background-color:red;color:white" class="btn btn-primary btn-lg">
+                        remove this profile
+
+                    </a>
+                {% endif %}
+                <br/>
+                <br/>
+                <a href="{% url 'viewPerson' default="Parent"  AtheId=0 %}" style="width:100%;background-color:green;color:white" class="btn btn-primary btn-lg">
+                    Back to view Profile
+
+                </a>
+           
+            </div>
+
+          </form>
+    </div>
+   
+
+
+
+</div>
+
+
+{% endblock %}

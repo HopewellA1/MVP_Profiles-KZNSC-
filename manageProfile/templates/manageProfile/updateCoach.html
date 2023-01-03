@@ -1,0 +1,135 @@
+{% extends "manageProfile/base.html" %}
+
+{% block content %}
+{% load static %}
+{% if messages %}
+{% for message in messages %}
+  <div>
+    <center>
+        <div style="padding:1rem; background-color:green;color:white">
+          <p>
+              <h3><b>{{ message }}</b></h3>
+          </p>
+        </div>
+      </center>
+    </div>
+
+{% endfor %}
+{% endif %}
+<div class="raw" style="display:flex;flex-direction:raw">
+    <div class="col-md-4">
+        
+        <div>
+            <img src="{{coach.ProfileImage.url}}" style="width:350px;height:350px"/>  
+        </div>
+        <div>
+            <h3><b>{{CoachPerson.FirstName}}
+        </div>
+        <div>
+            {{type}}
+        </div>
+    </div>
+   
+    <div class="card-body p-4 p-md-5" style="width:80%;border:solid 1px">
+           <div style="color:green">
+            <center >
+              <h3  class="mb-4 pb-2 pb-md-0 mb-md-5">Coach Update Form</h3>
+             </center>
+           </div>
+           <form method="POST" action="updateCoach" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+              <div class="col-md-6 mb-4">
+
+                <div class="form-outline">
+                
+                 <input type="file" name="ProfileImage" accept="image/*"  id="id_ProfileImage" class="form-control form-control-lg">
+                  <label class="form-label" for="ProfileImage">Profile Image</label>
+                </div>
+
+              </div>
+
+              <input type="hidden" name="person" value="{{CoachPerson}}"/>
+             
+              <div class="col-md-6 mb-4">
+
+                <div class="form-outline" style="display:flex;flex-direction: column">
+                    <select  name="Federation" class="form-control form-control-lg" style="display:flex;justify-centent:center">
+                        <!--Federation will be pulled fron the database once funtionality is implemented-->
+                       
+                        <option value="Select"><b>Select</b></option>
+                        <option value="Aquatics"><b>Aquatics</b></option>
+                        <option value="Chess"><b>Chess</b></option>
+                    </select>
+                   
+                  <label class="form-label" for="Federation">Federation: {{coach.Federation}}</label>
+                </div>
+
+              </div>
+            </div>
+            
+          
+          
+
+            <div class="row">
+                <div class="col-md-6 mb-4 pb-2">
+             
+                  <div class="form-outline">
+                    <input type="text"  name="ClubName" class="form-control form-control-lg" placeholder="{{ coach.ClubName }}"  />
+                    <label class="form-label" for="ClubName">Club Name</label>
+                  </div>
+
+                </div>
+                <div class="col-md-6 mb-4 pb-2">
+
+                  <div class="form-outline">
+                    <input type="text" name="CoachLevel" placeholder="{{ coach.CoachLevel }}"  class="form-control form-control-lg" />
+          
+
+                    <label class="form-label" for="CoachLevel">Coach Level</label>
+                  </div>
+
+                </div>
+              </div>
+
+            <div class="mt-2 pt-2">
+                   
+              <center>
+
+                {% if coach.Default == True %}
+              
+               
+                {% else %}
+                <input type="checkbox"  name="Default" id="id_Default" ><label class="vCheckboxLabel" for="id_Default">Make Default</label>
+               
+                
+                {% endif %}
+           
+            </center>
+              <input style="width:100%" class="btn btn-primary btn-lg" type="submit" value="Submit" />        
+              {% if CoachPerson.NumProfile > 1%}
+                <br/>
+                <br/>
+                <a href="{% url 'remove' profId=coach.CoachID type="Coach" %}" style="width:100%;background-color:red;color:white" class="btn btn-primary btn-lg">
+                  remove this profile
+
+                </a>
+             {% endif %}
+            <br/>
+            <br/>
+              <a href="{% url 'viewPerson' default="Coach"  AtheId=0 %}" style="width:100%;background-color:green;color:white" class="btn btn-primary btn-lg">
+                    Back to view Profile
+
+              </a>
+            </div>
+
+          </form>
+    </div>
+   
+
+
+
+</div>
+
+
+{% endblock %}

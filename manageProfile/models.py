@@ -10,7 +10,7 @@ class Persons(models.Model):
     personId = models.IntegerField(primary_key=True, blank=False,null=False,auto_created=True)
     IdentityNumber = models.CharField(null=False, max_length=13,unique=True)
     FirstName = models.TextField()
-    NumProfile= models.IntegerField(default=0)
+    NumProfile = models.IntegerField(default=0)
     user = models.ForeignKey(User,on_delete=models.CASCADE,blank=True,null=True)
 
 
@@ -25,6 +25,7 @@ class Parent(models.Model):
 class Athlete(models.Model):
     
     ProfileImage = models.ImageField(upload_to='manageProfile/images',blank=True, null=True)
+    
     AthleteID = models.IntegerField(primary_key=True,blank=False,null=False,auto_created=True)
  
     Federation = models.TextField(max_length=50)
@@ -35,5 +36,29 @@ class Athlete(models.Model):
     JoinDate = models.DateTimeField() 
     Default = models.BooleanField(default=False)
     Status = models.CharField(max_length=50, default='Active')
-    personId = models.ForeignKey(Persons,on_delete=models.CASCADE)
+    personId = models.ForeignKey(Persons,blank=True,null=True,on_delete=models.CASCADE)
     ParentId = models.ForeignKey(Parent,blank=True,null=True,on_delete=models.CASCADE)
+
+class Coach(models.Model):
+    ProfileImage = models.ImageField(upload_to='manageProfile/images',blank=True, null=True)
+    CoachID = models.IntegerField(primary_key=True,blank=False,null=False,auto_created=True)
+    personId = models.ForeignKey(Persons,on_delete=models.CASCADE)
+    CoachLevel = models.CharField(max_length=50)
+    Status = models.CharField(max_length=50, default='Active')
+    Default = models.BooleanField(default=False)
+    JoinDate = models.DateTimeField() 
+    Federation = models.TextField(max_length=50)  
+    ClubName = models.TextField(max_length=50)
+
+
+class Official(models.Model):
+    OfficialID = models.IntegerField(primary_key=True,blank=False,null=False,auto_created=True)
+    personId = models.ForeignKey(Persons,on_delete=models.CASCADE)
+    ProfileImage = models.ImageField(upload_to='manageProfile/images',blank=True, null=True)
+    Position = models.TextField(max_length=50)
+    JoinDate = models.DateTimeField() 
+    Default = models.BooleanField(default=False)
+    Status = models.CharField(max_length=50, default='Active')
+    
+    
+    
