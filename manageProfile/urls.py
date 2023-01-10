@@ -15,6 +15,8 @@ urlpatterns = [
    path('updateCoach/<PersonId>/<CoachId>',views.updateCoach,name="updateCoach"),
    
    path('updateParent/<parentId>',views.updateParent, name="updateParent"),
-   path('remove/<profId>/<type>',views.remove,name="remove")
+   path('remove/<profId>/<type>',views.remove,name="remove"),
+   path('createOfficial',views.createOfficial,name="createOfficial"),
+   path('updateOfficial/<PersonId>',views.updateOfficial, name="updateOfficial")
    
 ]

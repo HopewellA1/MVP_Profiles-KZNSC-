@@ -1,7 +1,7 @@
 import json
 from django.contrib import messages
 from django.shortcuts import render,redirect,get_object_or_404,HttpResponse
-from .models import Athlete,Persons,Parent,Coach
+from .models import Athlete,Persons,Parent,Coach,Official
 from django.utils.dateparse import parse_date
 from datetime import date, datetime
 from django.contrib.auth.decorators import login_required
@@ -21,6 +21,7 @@ def personal(request, id):
             if person:
             
                 if id != "0":
+                    messages.success(request,f"Dear {person.FirstName} please add your athlate personal information")
                     return render(request,'manageProfile/Personal.html', {"parent": id})
                     
                 # try:
@@ -184,17 +185,11 @@ def ParentInfo(request,id ):
         Person.save()
         newP = get_object_or_404(Parent, personId = Person)
         
-        messages.success(request,f"Dear {Person.FirstName} please add your athlate personal information")
+        
         #return render(request,'manageProfile/home.html',{"parent":parent, "ParentPerson":Person.personId})
        # return redirect('creatProfile', id=Person.personId, profile="Parent",parent=newP.ParentId)
         return redirect('personal', id=Person.personId)
-    
-    
-    
-    
-    
-    
-    
+     
     
     
 @login_required    
@@ -250,7 +245,7 @@ def ViewInformation(request,id, profile):
             try:
                     if request.POST["Default"] == 'on':
                     
-                        for item in getProfiles(Person.personId,remove="none"):
+                        for item in getProfiles(Person.personId,remove="Athlete"):
                             obj = item["Profile"]
                         
                             if obj.Default == True:
@@ -269,8 +264,13 @@ def ViewInformation(request,id, profile):
                                     coach.Default = False
                                     coach.save()
                                     print(f"Current default: {coach.Default}")
-                               
-                   
+                                if item["type"]  =="Official":
+                                    official = get_object_or_404(Official, pk = obj.CoachID)
+                                    official.Default = False
+                                    official.save()
+                                    print(f"Current default: {official.Default}")
+                                    
+                        
                         athlete.Default =True 
                         NumUpdate += 1             
             except:
@@ -380,7 +380,7 @@ def viewPerson(request, default,AtheId):
             pass
         
         try:
-            #fight goes on we no Coach profile
+            #fight goes on we on Coach profile
             coachProfile = get_object_or_404(Coach,personId = personalinfo)
             if coachProfile.Default == True:
                 DefaultProfile = coachProfile
@@ -391,6 +391,23 @@ def viewPerson(request, default,AtheId):
                     "pl":coachProfile
                   }
             if coachProfile.Status == "Active":
+                allPersonProfiles.append(pr)
+        except:
+            pass
+        
+        
+        try:
+            #cant't stop now we go with Official profile
+            officialProfile = get_object_or_404(Official,personId = personalinfo)
+            if officialProfile.Default == True:
+                DefaultProfile = officialProfile
+                Default = "Official"
+            
+            pr = { "type": "Official",
+                    "Default": officialProfile.Default,
+                    "pl":officialProfile
+                  }
+            if officialProfile.Status == "Active":
                 allPersonProfiles.append(pr)
         except:
             pass
@@ -507,7 +524,7 @@ def updateCoach(request,PersonId, CoachId):
         try:
             if request.POST["Default"] == 'on':
              
-                for item in getProfiles(CoachPerson.personId, remove= "none"):
+                for item in getProfiles(CoachPerson.personId, remove= "Coach"):
                     obj = item["Profile"]
                    
                     if obj.Default == True:
@@ -526,6 +543,11 @@ def updateCoach(request,PersonId, CoachId):
                             coach.Default = False
                             coach.save()
                             print(f"Current default: {coach.Default}")
+                        if item["type"]  =="Official":
+                            official = get_object_or_404(Official, pk = obj.CoachID)
+                            official.Default = False
+                            official.save()
+                            print(f"Current default: {official.Default}")
                         
                       
                 coach.Default =True 
@@ -571,7 +593,7 @@ def updateParent(request, parentId):
         try:
             if request.POST["Default"] == 'on':
              
-                for item in getProfiles(parentPerson.personId, remove = "none"):
+                for item in getProfiles(parentPerson.personId, remove = "Parent"):
                     obj = item["Profile"]
                    
                     if obj.Default == True:
@@ -587,6 +609,11 @@ def updateParent(request, parentId):
                             coach = get_object_or_404(Coach, pk = obj.CoachID)
                             coach.Default = False
                             coach.save()
+                        if item["type"]  =="Official":
+                            official = get_object_or_404(Official, pk = obj.CoachID)
+                            official.Default = False
+                            official.save()
+                            print(f"Current default: {official.Default}")
                         
                       
                 parentProfile.Default =True 
@@ -667,6 +694,27 @@ def getProfiles(Personid,remove):
                 profiles.append(ProfileObj)
         except:
             pass
+    #get Official
+    
+    
+    
+    if remove == "Official":
+        pass
+    else:
+        
+
+        try:
+            official = get_object_or_404(Official, personId = person)
+            ProfileObj ={
+                "Profile":official,
+                "type":"Official"
+            }
+            if official.Status == "Active":
+                profiles.append(ProfileObj)
+        except:
+            pass
+    
+    
     
     return profiles
 
@@ -684,6 +732,9 @@ def remove(request, profId, type):
         
     if type == "Coach":
         profile = get_object_or_404(Coach,pk =profId)
+    
+    if type == "Official":
+        profile = get_object_or_404(Official,pk =profId)
     
     if request.method =='GET':
         if profile.Default == True:
@@ -711,6 +762,10 @@ def remove(request, profId, type):
                     coach = get_object_or_404(Coach,personId = profile.personId)
                     coach.Default = True
                     coach.save()
+                if newDefault =="Official":
+                    official = get_object_or_404(Official,personId = profile.personId)
+                    official.Default = True
+                    official.save()
                 pass
             pass
         except:
@@ -721,5 +776,132 @@ def remove(request, profId, type):
         profile.save()
         messages.success(request, f"Dear  {profile.personId.FirstName} you have removed the {t} profile suuccessfully")
         return redirect('viewPerson', default="none",AtheId=0)
+        
+#creating officals profile      
+@login_required
+def createOfficial(request):
+    
+    user = request.user
+    PersonInfo = get_object_or_404(Persons, user = user)
+    if request.method =='GET':
+        
+        
+        return render(request,'manageProfile/createOfficial.html',{"person":PersonInfo})
+
+    if request.method == 'POST':
+        ProfDefault = False
+        
+        Person = PersonInfo
+        if Person.NumProfile == 0:
+           ProfDefault = True
+        else:
+            ProfDefault = False
+        official = Official.objects.create(personId = Person,
+                                        ProfileImage=request.FILES['ProfileImage'],
+                                         Federation = request.POST['Federation'],
+                                       
+                                        
+                                     
+                                   
+                                         JoinDate = datetime.now(),
+                                         Default = ProfDefault,
+                                         Position = request.POST["Position"],
+                                        
+                                             
+        )
+        Person.NumProfile += 1
+        Person.save()
+        messages.success(request,f"Dear {official.personId.FirstName} you have succeessfully created the official profile")
+        return redirect('viewPerson', default = "Official",AtheId = 0)    
+        
+        
+#updating Official profile
+@login_required
+def updateOfficial(request,PersonId):
+    user = request.user
+    OfficialPerson = get_object_or_404(Persons, user= user)
+    officialProfile = get_object_or_404(Official, personId = OfficialPerson)
+    if request.method =='GET':
+        
+        
+        return render(request,'manageProfile/updateOfficial.html',{"OfficialPerson":OfficialPerson,"type":"Official","official":officialProfile})  
+    
+    if request.method =='POST':
+        
+        
+          
+        NumUpdate = 0
+        official = get_object_or_404(Official,personId= OfficialPerson)
+    
+        if request.POST['Federation']:
+            if request.POST['Federation'] ==  "Select":
+                pass
+            else:
+                official.Federation = request.POST['Federation']
+                NumUpdate += 1
+                
+       
+                
+        if request.POST['Position']:
+            official.Position = request.POST['Position']
+            NumUpdate += 1
+        
+        try:
+            if request.FILES['ProfileImage']:
+                official.ProfileImage=request.FILES['ProfileImage']
+                NumUpdate += 1    
+        except:
+            pass
+        try:
+            if request.POST["Default"] == 'on':
+             
+                for item in getProfiles(OfficialPerson.personId, remove= "Official"):
+                    obj = item["Profile"]
+                   
+                    if obj.Default == True:
+                        if item["type"] =="Parent":
+                            parent = get_object_or_404(Parent, pk = obj.ParentId)
+                            parent.Default = False
+                            parent.save()
+                            print(f"Current default: {parent.Default}")
+                        if item["type"] =="Athlete":
+                            athlete = get_object_or_404(Athlete, pk = obj.AthleteID)
+                            athlete.Default = False
+                            athlete.save()
+                            print(f"Current default: {athlete.Default}")
+                        if item["type"]  =="Coach":
+                            coach = get_object_or_404(Coach, pk = obj.CoachID)
+                            coach.Default = False
+                            coach.save()
+                            print(f"Current default: {coach.Default}")
+                        
+                        if item["type"]  =="Official":
+                            official = get_object_or_404(Official, pk = obj.CoachID)
+                            official.Default = False
+                            official.save()
+                            print(f"Current default: {official.Default}")
+                official.Default =True 
+                NumUpdate += 1     
+                 
+               # print(f"Profiles under the current person:\n\n{profiles}\n\n")
+            #print(f"\n\nThe curent default value is: "+ request.POST["Default"] +"\n\n")
+        except:
+            pass
+           
+        if NumUpdate >0:
+                #print(f"\n\nNumber of updates made: {NumUpdate} \n\n")
+                messages.success(request,f"Dear {OfficialPerson.FirstName} profile information has been updated successfully")
+                
+                official.save()
+        else:
+            messages.success(request,f"Dear {OfficialPerson.FirstName}  you did not make any changes to the profile")
+        
+        #return render(request, 'manageProfile/updateCoach.html', {"coach": coach,"CoachPerson":CoachPerson,"type": "Coach"})
+        return redirect('updateOfficial', PersonId=OfficialPerson.personId)
+    
+        
+        
+        
+        
         
         

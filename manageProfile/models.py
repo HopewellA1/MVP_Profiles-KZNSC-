@@ -59,6 +59,10 @@ class Official(models.Model):
     JoinDate = models.DateTimeField() 
     Default = models.BooleanField(default=False)
     Status = models.CharField(max_length=50, default='Active')
+    Federation = models.TextField(max_length=50)
+    
+    
+    
     
     
     

@@ -67,8 +67,66 @@
             <div class="card-body p-4 p-md-5 container" style="width:100%;padding:5px">
                <div style="border:solid 1px;padding:5px;width:100%">
 
+                {% if Default == "Official" %}
+                    <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Now viewing official profile</h3>
+                    <form method="POST" action="createOfficial" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                          <div class="col-md-6 mb-4">
+          
+                            <div class="form-outline">
+                            
+                             <input type="file" name="ProfileImage" disabled accept="image/*"  id="id_ProfileImage" class="form-control form-control-lg">
+                              <label class="form-label" for="ProfileImage">Profile Image</label>
+                            </div>
+          
+                          </div>
+        
+                          <input type="hidden" name="person" value="{{person}}"/>
+                         
+                          <div class="col-md-6 mb-4">
+          
+                            <div class="form-outline"  style="display:flex;flex-direction: column">
+                                <select required disabled name="Federation" class="form-control form-control-lg" style="display:flex;justify-centent:center">
+                                    <!--Federation will be pulled fron the database once funtionality is implemented-->
+                                    <option style="width:100%" value="Aquatics"><b>{{DefaultProfile.Federation}}</b></option>
+                                 
+                                </select>
+                               
+                              <label class="form-label" for="Federation">Federation</label>
+                            </div>
+          
+                          </div>
+                        </div>
+                        
+                      
+                      
+          
+                  
+                    
+                  
+        
+                            <div class="mt-2 pt-2">
+                            <input type="text" {{DefaultProfile.Position}} disabled name="Position" placeholder="Position"  class="form-control form-control-lg" required/>
+                      
+        
+                            <label style="width:100%" class="form-label" for="CoachLevel">Position</label>
+                          </div>
+                  
+                        <div class="mt-2 pt-2">
+                            <a href="{% url 'updateOfficial' PersonId=Person.personId %}" class="btn btn-primary btn-lg" type="submit"  style="width:100%" >Edit</a>       
+                
+                        </div>
+          
+                      </form>
+            {% endif %}
+
 
                 {% if Default == "Parent" %}
+                <center>
+
+                    <h3><b>Now viewing the parent profile</b></h3>  
+                </center>
 
                 <center>
 
@@ -82,7 +140,7 @@
 
 
 
-                    {% if Default == "Athlete" %}
+                {% if Default == "Athlete" %}
                     <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Now viewing athlate profile</h3>
                     <form method="POST" action="ViewInformation" enctype="multipart/form-data">
                     {% csrf_token %}
@@ -213,13 +271,13 @@
                     </div>
 
                     </form>
-                    {% endif %}
+                {% endif %}
 
 
 
 
 
-                    {% if Default == "Coach" %}
+                {% if Default == "Coach" %}
                     <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Now viewing coach profile</h3>
                     <form method="POST" action="CreateCoach" enctype="multipart/form-data">
                         {% csrf_token %}
@@ -285,7 +343,7 @@
                         </div>
           
                       </form>
-                    {% endif %}
+                {% endif %}
                </div>
             </div>
         

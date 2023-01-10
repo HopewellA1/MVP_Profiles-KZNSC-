@@ -6,9 +6,10 @@
     <div class="row container">
 
       <a href="{% url 'creatProfile' id=person profile="Athlate" parent=0 %}">Athlete</a>
-      
+      <!--createOfficial-->
       <a href="{% url 'ParentInfo' id=person  %}">Parent</a>
       <a href="{% url 'CreateCoach' id=person  %}">Coach</a>
+      <a href="{% url 'createOfficial'  %}">Official</a>
         <div class="col-md-4 text-center">
             <h3><b>Athlate<b></h3>
                 <form method="post" action="ChooseProfile"/>
