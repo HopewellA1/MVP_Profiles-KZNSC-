@@ -1,0 +1,166 @@
+{% extends "manageProfile/base.html" %}
+
+{% block content %}
+{% load static %}
+
+
+<style>
+
+    .form-control{
+        border:solid 2px;
+    }
+
+
+</style>
+
+<hr/>
+{% if messages %}
+{% for message in messages %}
+  <div>
+    <center>
+        <div style="padding:1rem; background-color:green;color:white">
+          <p>
+              <h3><b>{{ message }}</b></h3>
+          </p>
+        </div>
+      </center>
+    </div>
+
+{% endfor %}
+{% endif %}
+<center>
+    <div >
+  
+        <div>
+            <div class="card-body p-4 p-md-5" style="border:solid 1px">
+                <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Please add your current doctors information</h3>
+                <form method="post" action"addDoctor">
+                    {% csrf_token %}
+           
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                              
+                                <input type="text" name="FirstName" placeholder="First name"  class="form-control form-control-lg">
+                                <label class="form-label" for="FirstName">First name</label>
+                         
+                            </div>
+        
+                        </div>
+      
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline" style="display:flex;flex-direction: column">
+                            
+                            <input type="text" name="Surname" placeholder="Surname"  class="form-control form-control-lg">
+                            <label class="form-label" for="Surname">Surname</label>
+                         
+                        </div>
+        
+                        </div>
+                    </div>
+    
+    
+    
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                                
+                                <input type="text" name="Speciality" placeholder="Speciality"  class="form-control form-control-lg">
+                                <label class="form-label" for="Speciality">Speciality</label>
+                         
+                            </div>
+        
+                        </div>
+      
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline" style="display:flex;flex-direction: column">
+                          
+                            <input type="text" name="Role" placeholder="Role"  class="form-control form-control-lg">
+                            <label class="form-label" for="Role">Role</label>
+                         
+                        </div>
+        
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                              
+                                <input type="text" name="CellNumber" placeholder="Cell Number" class="form-control form-control-lg">
+                                <label class="form-label" for="CellNumber">Cell Number</label>
+                         
+                            </div>
+        
+                        </div>
+      
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline" style="display:flex;flex-direction: column">
+                           
+                            <input type="text" name="WorkTel" placeholder="Work Telephone"  class="form-control form-control-lg">
+                            <label class="form-label" for="WorkTel">Work Telephone</label>
+                            
+                            
+                         
+                        </div>
+        
+                        </div>
+                    </div>
+    
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                               
+                                <input type="email" name="EmailAddress" placeholder="Email Address"  class="form-control form-control-lg">
+                                <label class="form-label" for="EmailAddress">Email Address</label>
+
+
+                                
+                         
+                            </div>
+        
+                        </div>
+                        
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline" style="display:flex;flex-direction: column">
+                            
+                            <input type="text" name="WorkAddress" placeholder="Work Address" class="form-control form-control-lg">
+                            <label class="form-label" for="WorkAddress">Work Address</label>
+
+                            
+                        
+                        </div>
+        
+                        </div>
+                    </div>
+                    
+
+                    <input class="btn btn-default btn-primary" style="width:100%" type="submit" value="Save and continue"/>
+                </form>
+            
+            </div>
+            
+        </div>
+    </div>
+</center>
+
+
+{% endblock %}

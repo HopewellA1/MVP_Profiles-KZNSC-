@@ -2,6 +2,19 @@
 
 {% block content %}
 {% load static %}
+
+<style>
+
+    .link{
+        width:10%;
+        height:100px;
+        padding:2rem;
+         border:solid 2px;
+         justify-content:center;
+         align-content:center:
+    }
+
+</style>
 <div class="container text-center">
     <div>
         <h3><b>Creating Person to create profile</b></h3>
@@ -29,8 +42,12 @@
                 Please click below to create new Profile
             </p>
         </div>
-        <div>
-            <a href="{% url 'personal' id=0 %}">Start</a>
+        <div style="padding:2rem">
+            <a class="link" href="{% url 'personal' id=0 %}">Create a profile</a>
+            {% if person.personId %}
+
+            <a class="link" href="{% url 'viewPerson' default="none" AtheId=0 %}">My profiles and informations</a>
+            {% endif %}
       
            
         </div>

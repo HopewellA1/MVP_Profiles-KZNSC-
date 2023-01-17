@@ -1,0 +1,177 @@
+{% extends "manageProfile/base.html" %}
+
+{% block content %}
+{% load static %}
+
+
+<style>
+
+    .form-control{
+        border:solid 2px;
+    }
+    .table{
+        width:100%;
+        border:solid 2px;
+    }
+
+</style>
+<hr/>
+{% if messages %}
+{% for message in messages %}
+  <div>
+    <center>
+        <div style="padding:1rem; background-color:green;color:white">
+          <p>
+              <h3><b>{{ message }}</b></h3>
+          </p>
+        </div>
+      </center>
+    </div>
+
+{% endfor %}
+{% endif %}
+<center>
+    <div >
+  
+        <div>
+            <div class="card-body p-4 p-md-5" style="border:solid 1px">
+                <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Remove employment information?</h3>
+                <form method="post" action"addEmployment">
+                    {% csrf_token %}
+                    <!--ethnicity-->
+                  
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                              
+                                <input type="text" disabled  name="CompanyName" placeholder="{{employment.CompanyName}}"  class="form-control form-control-lg">
+                                <label class="form-label" for="CompanyName">Company Name</label>
+                         
+                            </div>
+        
+                        </div>
+      
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline" style="display:flex;flex-direction: column">
+                            
+                            <input type="text" disabled  name="CompanyAddress" placeholder="{{employment.CompanyAddress}}"  class="form-control form-control-lg">
+                            <label class="form-label" for="CompanyAddress">Company Address</label>
+                         
+                        </div>
+        
+                        </div>
+                    </div>
+    
+    
+    
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                                
+                                <input type="date" disabled  name="StartDate" placeholder="Start Date"  class="form-control form-control-lg">
+                                <label class="form-label" for="StartDate">Start date: <b>{{employment.StartDate}}</b></label>
+                         
+                            </div>
+        
+                        </div>
+      
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline" style="display:flex;flex-direction: column">
+                          
+                            
+                                <input disabled class="form-control form-control-lg" type="date" name="EndDate" />
+                                <label class="form-label" for="EndDate">End date: {{employment.EndDate}}</label>
+                            
+                         
+                            </div>
+      
+                        </div>
+                        
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                              
+                                <input disabled type="text" name="Telephone"  placeholder="{{employment.Telephone}}"  class="form-control form-control-lg">
+                                <label class="form-label" for="Telephone">Telephone</label>
+                         
+                            </div>
+        
+                        </div>
+      
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline" style="display:flex;flex-direction: column">
+                            
+                            <input disabled type="text" name="WorkPosition" placeholder="{{employment.WorkPosition}}" class="form-control form-control-lg">
+                            <label class="form-label" for="WorkPosition">Work Position</label>
+                         
+                        </div>
+        
+                        </div>
+                    </div>
+
+                    <div class="container" style="display:flex;flex-direction: column; justify-content:center">
+                        
+                        <label style="color:green" class="form-label" for="CurrentlyWorking"><b>Currently Working</b></label>
+                        
+                        <input disabled style="border:solid 3px green"
+                         type="checkbox" name="CurrentlyWorking"
+                         {% if employment.CurrentlyWorking == True%}
+                            checked
+                            value="OldCheck"
+                         {% endif %}
+
+                         class=""/>
+                    </div>
+                    <br/>
+                   <div>
+                    <input disabled style="padding:1rem" class="form-control form-control-lg" placeholder="{{employment.Skills }}" type="text" name="Skills"  />
+                    <label class="form-label" for="Skills">Skills</label>
+                   </div>
+                    <br/>
+                    <input class="btn btn-default btn-primary" style="width:100%" type="submit" value="Yes remove information"/>
+                    
+                 
+                    {% if place == "OnView" %}
+                    <br/>
+                    <br/>
+                    <a href="{% url 'viewPerson' default="Employment" AtheId=0 %}" class="btn btn-default btn-primary" style="width:100%; background-color:green" >
+                        <b>Back</b>
+                    </a>
+
+               {% endif  %}
+               {% if place == "OnCreate" %}
+               <br/>
+               <br/>
+               <a href="{% url 'addEmployment' personId=Person.personId %}" class="btn btn-default btn-primary" style="width:100%; background-color:green" >
+                   <b>Back</b>
+               </a>
+
+          {% endif  %}
+                
+                </form>
+            
+            </div>
+            
+        </div>
+    </div>
+</center>
+
+
+{% endblock %}

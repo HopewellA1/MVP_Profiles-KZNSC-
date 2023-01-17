@@ -2,31 +2,36 @@
 
 {% block content %}
 {% load static %}
-<div class="TypesHolder">
-    <div class="row container">
+<style>
 
-      <a href="{% url 'creatProfile' id=person profile="Athlate" parent=0 %}">Athlete</a>
+    .link{
+        width:10%;
+        height:100px;
+        padding:2rem;
+         border:solid 2px;
+         justify-content:center;
+         align-content:center:
+    }
+
+</style>
+<div>
+    <div class="row container" style="padding:5rem; display:flex;justify-content:center;align-content:center">
+
+        
       <!--createOfficial-->
-      <a href="{% url 'ParentInfo' id=person  %}">Parent</a>
-      <a href="{% url 'CreateCoach' id=person  %}">Coach</a>
-      <a href="{% url 'createOfficial'  %}">Official</a>
-        <div class="col-md-4 text-center">
-            <h3><b>Athlate<b></h3>
-                <form method="post" action="ChooseProfile"/>
-                {% csrf_token %}
-                    <input type="hidden" name="person" value="{{person}}"/>
-                    <input type="submit" value="Save"/>
-                </form>
-        </div>
-        <div class="col-md-4 text-center">
-            <h3><b>Parent<b></h3>
-        </div>
-        <div class="col-md-4 text-center">
-            <h3><b>Parent<b></h3>
-        </div>
-        <div class="col-md-4 text-center">
-            <h3><b>Parent<b></h3>
-        </div>
+      <div style="padding:0.5rem;">
+        <a class="link" href="{% url 'creatProfile' id=person profile="Athlate" parent=0 %}">Athlete</a>
+      </div>
+      <div style="padding:0.5rem;">
+        <a class="link" href="{% url 'ParentInfo' id=person  %}">Parent</a>
+      </div style="padding:0.5rem;">
+      <div style="padding:0.5rem;">
+        <a class="link" href="{% url 'CreateCoach' id=person  %}">Coach</a>
+      </div style="padding:0.5rem;">
+      <div style="padding:0.5rem;">
+        <a class="link" href="{% url 'createOfficial'  %}">Official</a>
+      </div>
+  
     </div>
 </div>    
 

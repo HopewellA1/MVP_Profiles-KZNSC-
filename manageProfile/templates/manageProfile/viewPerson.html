@@ -2,6 +2,21 @@
 
 {% block content %}
 {% load static %}
+
+<style>
+
+    .form-control{
+        border:solid 2px;
+    }
+    .table{
+        width:100%;
+        border:solid 2px;
+       
+    }
+
+</style>
+
+
 <!--Note the "DefaultProfile" stands for the currently viewed profile or the default if none selected-->
 {% if messages %}
 {% for message in messages %}
@@ -20,7 +35,7 @@
 
 <!---->
 
-    <div class="row container"  style="border:solid;padding:3rem">
+    <div class="row container"  style="border:solid;padding:10px; display:flex;flex-direction:row">
         
       
         <!--front end responsiveness needed
@@ -28,44 +43,466 @@
         width:35%(big screen)
         just suggestion
         -->
-        <div class="col-md-4" style="border:solid 1px;widh:20p%">
+            <div class="col-md-4" style="border:solid 1px;widh:20p%">
 
    
 
                 <img src="{{DefaultProfile.ProfileImage.url}}" style="padding:5px;width:inherit"/>  
                 <div>
-                    <h3><b>{{Person.FirstName}} ({{Default}})
+                    
+                    <h3><b>{{Person.FirstName}} ({{Default}})</h3>
+                   
                 </div>
             
-            <div>
-                Your Profiles:{% for item in allPersonProfiles %}
-    
-                        <a href="{% url 'viewPerson' default=item.type AtheId=0 %}">
-                        
-                            <b style="padding:2px">
-                                {{item.type }}
-                                
-                                {% if item.Default == True %}
-                                    <label>(default) </label>
-                                {% endif %}/
-    
-    
-                            </b>
-    
-                        </a>
-    
-    
-                                        
-                              
-                {% endfor %}
-            </div>
-
-           <label>Join date: {{DefaultProfile.JoinDate}}</label>
-
-        </div >
+                <div>
+                    Your Profiles:{% for item in allPersonProfiles %}
         
-            <div class="card-body p-4 p-md-5 container" style="width:100%;padding:5px">
-               <div style="border:solid 1px;padding:5px;width:100%">
+                            <a href="{% url 'viewPerson' default=item.type AtheId=0 %}">
+                            
+                                <b style="padding:2px">
+                                    {{item.type }}
+                                    
+                                    {% if item.Default == True %}
+                                        <label>(default) </label>
+                                    {% endif %}/
+        
+        
+                                </b>
+        
+                            </a>
+        
+    
+                                            
+                                
+                        {% endfor %}
+                </div>
+
+                <label>Join date: {{DefaultProfile.JoinDate}}</label>
+                <hr/>
+                <div>
+                    
+                    <a class="btn btn-default btn-success" 
+                    {% if Default == "Person" %}
+                        style="width:inherit;width:100%; padding:1rem; background-color:white;color:green;border:solid 2px inherit"
+                    {% else %}
+                        style="width:100%; padding:1rem;"
+
+                    {% endif %}
+                    
+                    
+                    href="{% url 'viewPerson' default="Person"  AtheId=0 %}">
+                        <h3><b>Personal Information</b></h3>
+                    </a>
+                </div>
+                <br/>
+                <div>
+                    
+                    <a class="btn btn-default btn-success" 
+                    {% if Default == "Education" %}
+                        style="width:inherit;width:100%; padding:1rem; background-color:white;color:green;border:solid 2px inherit"
+                    {% else %}
+                        style="width:100%; padding:1rem;"
+
+                    {% endif %}
+                    
+                    
+                    href="{% url 'viewPerson' default="Education"  AtheId=0 %}">
+                        <h3><b>Education</b></h3>
+                    </a>
+                </div>
+                <br/>
+                <div>
+                    
+                    <a class="btn btn-default btn-success" 
+                    {% if Default == "Employment" %}
+                        style="width:inherit;width:100%; padding:1rem; background-color:white;color:green;border:solid 2px inherit"
+                    
+                    {% else %}
+                        style="width:100%; padding:1rem;"
+
+                    {% endif %}
+                    
+                    
+                    href="{% url 'viewPerson' default="Employment"  AtheId=0 %}">
+                        <h3><b>Employment</b></h3>
+                    </a>
+                </div>
+                <br/>
+                <div>
+                    
+                    <a class="btn btn-default btn-success" 
+                    {% if Default == "NextOfKin" %}
+                        style="width:inherit;width:100%; padding:1rem; background-color:white;color:green;border:solid 2px inherit"
+                    
+                    {% else %}
+                        style="width:100%; padding:1rem;"
+
+                    {% endif %}
+                    
+                    
+                    href="{% url 'viewPerson' default="NextOfKin"  AtheId=0 %}">
+                        <h3><b>Next of kin</b></h3>
+                    </a>
+                </div>
+            </div >
+        
+            <div class="card-body p-4 p-md-5 container"  style="width:100%;padding:5px;">
+            
+                <div  
+                {% if Default == "Person" %}
+                     style="border:solid 1px;padding:5px;width:150%" 
+                {% else %}
+                    style="border:solid 1px;padding:5px;width:100%"
+                {% endif %}>
+
+
+
+                {% if Default == "NextOfKin" %}
+
+
+                <form method="post" action"updateNextOfKin">
+                    {% csrf_token %}
+                    <!--ethnicity-->
+                  
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                              
+                                <input type="text" name="FirstName" disabled value="{{ nextofkin.FirstName}}"  class="form-control form-control-lg">
+                                <label class="form-label" for="FirstName">First name</label>
+                         
+                            </div>
+        
+                        </div>
+      
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline" style="display:flex;flex-direction: column">
+                            
+                            <input type="text" name="Surname" disabled value="{{ nextofkin.Surname}}"  class="form-control form-control-lg">
+                            <label class="form-label" for="Middlename">Surname</label>
+                         
+                        </div>
+        
+                        </div>
+                    </div>
+    
+    
+    
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                                
+                                <input type="text" name="Title" disabled value="{{ nextofkin.Title}}"  class="form-control form-control-lg">
+                                <label class="form-label" for="lastname">Title</label>
+                         
+                            </div>
+        
+                        </div>
+      
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline" style="display:flex;flex-direction: column">
+                          
+                            <select required disabled name="Gender" class="form-control form-control-lg" style="display:flex;justify-centent:center">
+                                <option value="select"><b>{{ nextofkin.Gender}}</b></option> 
+                                
+                            </select>
+                           
+                            <label class="form-label" for="gender">Gender</label>
+                         
+                        </div>
+        
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                              
+                                <input type="email" name="EmailAddress" disabled value="{{ nextofkin.EmailAddress}}" class="form-control form-control-lg">
+                                <label class="form-label" for="EmailAddress">Email address</label>
+                         
+                            </div>
+        
+                        </div>
+      
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline" style="display:flex;flex-direction: column">
+                            
+                            <input type="text" name="PhoneNumber" disabled value="{{ nextofkin.PhoneNumber}}"  class="form-control form-control-lg">
+                            <label class="form-label" for="PhoneNumber">Phone number</label>
+                         
+                        </div>
+        
+                        </div>
+                    </div>
+    
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                              
+                                <input type="text" name="HomeAddress" disabled value="{{ nextofkin.HomeAddress}}" class="form-control form-control-lg">
+                                <label class="form-label" for="HomeAddress">Home address</label>
+                         
+                            </div>
+        
+                        </div>
+                        
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline" style="display:flex;flex-direction: column">
+                            
+                            <input type="text" name="WorkAddress" disabled value="{{ nextofkin.WorkAddress}}"  class="form-control form-control-lg">
+                            <label class="form-label" for="WorkAddress">Work address</label>
+                        
+                        </div>
+        
+                        </div>
+                    </div>
+                    
+
+                    
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                              
+                                <input type="text" name="Relationship" disabled value="{{ nextofkin.Relationship}}" class="form-control form-control-lg"/>
+                               
+                                <label class="form-label" for="Relationship">Relationship</label>
+                         
+                            </div>
+        
+                        </div>
+                        
+                       <!--Jobtitle-->
+                       
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline" style="display:flex;flex-direction: column">
+                                <input type="text" name="Jobtitle" disabled value="{{ nextofkin.Jobtitle}}" class="form-control form-control-lg"/>
+                               
+                               
+                                <label class="form-label" for="Jobtitle">Job title</label>
+                            
+                            </div>
+            
+                        </div>
+                    </div>
+
+
+                    
+                    <input type="text" name="JobDescription" disabled value="{{ nextofkin.JobDescription}}" class="form-control form-control-lg"/>
+                               
+                               
+                    <label class="form-label" for="JobDescription">Job description</label>
+
+
+
+
+
+
+                    <a href="{% url 'updateNextOfKin' kinId=nextofkin.ID place="OnView" %}" class="btn btn-default btn-primary" style="width:100%;background-color:green">
+                        Edit
+                    </a>
+                    
+                </form>
+
+
+                {% endif %}
+
+
+
+
+
+
+
+
+
+
+
+                {% if Default == "Employment" %}
+
+                {% if employments %}
+                <div>
+                   
+                    <div>
+                        <h3><b>Employment achievements</b></h3>
+                    </div>
+           
+                    <table class="table" >
+                        <tr>
+                            <th> Company Name</th>
+                            <th>Company Address</th>
+                            <th>Currently Working</th>
+                            <th>Work Position?</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Telephone</th>
+                            <th>Skills</th>
+                        </tr>
+                        
+                        {% for item in employments %}
+
+                            <tr>
+                                <td>{{item.CompanyName}}</td>
+                                <td>{{item.CompanyAddress}}</td>
+                                <td>
+                                
+                                    {% if item.CurrentlyWorking == True %}
+                                        Yes
+                                    {% else %}
+                                        No
+                                    {% endif %}
+
+                                
+                                </td>
+
+                                <td>{{item.WorkPosition}}</td>
+                                <td>{{item.StartDate}}</td>
+                                <td>{{item.EndDate}}</td>
+                                <td>{{item.Telephone}}</td>
+                                <td>{{item.Skills}}</td>
+                              
+                                <td>
+                                    <a href="{% url 'updateEmployment' employmentId=item.Employment_id place="OnView" %}" >Edit</a> |
+                                    <!--#(request, educationId, place)-->
+                                    <a href="{% url 'removeEmployment' employmentId=item.Employment_id place="OnView" %}" >remove</a>
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+                    </table>
+                </div>
+               
+            {% endif %}
+
+                {% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+                {% if Default == "Education" %}
+              
+                
+                          
+                <table class="table" >
+                    <tr>
+                        <th> Education Level</th>
+                        <th>Start date</th>
+                        <th> End date</th>
+                        <th> Completed?</th>
+                        <th> Action</th>
+                    </tr>
+                    
+                    {% for item in eds %}
+
+                        <tr>
+                            <td>{{item.EducationLevel}}</td>
+                            <td>{{item.YearStarted}}</td>
+                            <td>{{item.YearEnd}}</td>
+
+                            <td>{{item.Completed}}</td>
+                            <td>
+                                <a href="{% url 'updateEducation' educationId=item.education_id  place="OnView" %}" >Edit</a> |
+                                <!--#(request, educationId, place)-->
+                                <a href="{% url 'removEducation' educationId=item.education_id  place="OnView" %}" >remove</a>
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+                </table>
+
+             
+              
+                <br/>
+                <hr/>
+                <br/>
+            
+              
+                {% endif %}
+
+
+
+                {% if Default == "Person" %}
+
+                <div class="container" style="display:flex;flex-direction:column; width:100%;padding:0rem">
+                    <div style="display:flex;flex-direction:row;justify-content:center; padding:1rem">
+                        <label class="form-label" style="width:20%;"><b>First name</b></label>
+                        <input class="form-control form-control-lg" type="text" disabled value="{{Person.FirstName}}"/>
+                    </div>
+                   
+                    <div style="display:flex;flex-direction:row;justify-content:center;padding:1rem">
+                        <label class="form-label" style="width:20%;"><b>Middle name</b></label>
+                        <input class="form-control form-control-lg" type="text" disabled value="{{Person.Middlename}}"/>
+                    </div>
+                    <div style="display:flex;flex-direction:row;justify-content:center;padding:1rem">
+                        <label class="form-label" style="width:20%;"><b>Last name</b></label>
+                        <input class="form-control form-control-lg" type="text" disabled value="{{Person.lastname}}"/>
+                    </div>
+                    <div style="display:flex;flex-direction:row;justify-content:center;padding:1rem">
+                        <label class="form-label" style="width:20%;"><b>Date of birth</b></label>
+                        <input class="form-control form-control-lg" type="text" disabled value="{{Person.FirstName}}"/>
+                    </div>
+                    <div style="display:flex;flex-direction:row;justify-content:center;padding:1rem">
+                        <label class="form-label" style="width:20%;"><b>Id number</b></label>
+                        <input class="form-control form-control-lg" type="text" disabled value="{{Person.IdentityNumber}}"/>
+                    </div>
+                    <div style="display:flex;flex-direction:row;justify-content:center;padding:1rem">
+                        <label class="form-label" style="width:20%;"><b>cell phone</b></label>
+                        <input class="form-control form-control-lg" type="text" disabled value="{{Person.cellphone}}"/>
+                    </div>
+                    <div style="display:flex;flex-direction:row;justify-content:center;padding:1rem">
+                        <label class="form-label" style="width:20%;"><b>Email address</b></label>
+                        <input class="form-control form-control-lg" type="text" disabled value="{{Person.user.email}}"/>
+                    </div>
+                    <div style="display:flex;flex-direction:row;justify-content:center;padding:1rem">
+                        <label class="form-label" style="width:20%;"><b>Home address</b></label>
+                        <input class="form-control form-control-lg" type="text" disabled value="{{Person.physicaladdress1}}"/>
+                    </div>
+
+                    <div class="mt-2 pt-2">
+                        <a href="{% url 'updatePersonal' personId=Person.personId %}" class="btn btn-primary btn-lg" type="submit"  style="width:100%" >Edit</a>       
+            
+                    </div>
+                </div>
+
+
+
+
+                {% endif %}
+
+
+
+
+
 
                 {% if Default == "Official" %}
                     <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Now viewing official profile</h3>
@@ -119,7 +556,7 @@
                         </div>
           
                       </form>
-            {% endif %}
+                {% endif %}
 
 
                 {% if Default == "Parent" %}

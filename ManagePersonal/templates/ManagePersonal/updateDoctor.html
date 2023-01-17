@@ -1,0 +1,168 @@
+{% extends "manageProfile/base.html" %}
+
+{% block content %}
+{% load static %}
+
+
+<style>
+
+    .form-control{
+        border:solid 2px;
+    }
+
+
+</style>
+
+<hr/>
+{% if messages %}
+{% for message in messages %}
+  <div>
+    <center>
+        <div style="padding:1rem; background-color:green;color:white">
+          <p>
+              <h3><b>{{ message }}</b></h3>
+          </p>
+        </div>
+      </center>
+    </div>
+
+{% endfor %}
+{% endif %}
+<center>
+    <div >
+  
+        <div>
+            <div class="card-body p-4 p-md-5" style="border:solid 1px">
+                <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">You can update the doctors information</h3>
+                <form method="post" action"updateDoctor">
+                    {% csrf_token %}
+           
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                              
+                                <input type="text" name="FirstName" placeholder="{{Doctor.FirstName}}"  class="form-control form-control-lg">
+                                <label class="form-label" for="FirstName">First name</label>
+                         
+                            </div>
+        
+                        </div>
+      
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline" style="display:flex;flex-direction: column">
+                            
+                            <input type="text" name="Surname" placeholder="{{Doctor.Surname}}"  class="form-control form-control-lg">
+                            <label class="form-label" for="Surname">Surname</label>
+                         
+                        </div>
+        
+                        </div>
+                    </div>
+    
+    
+    
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                                
+                                <input type="text" name="Speciality" placeholder="{{Doctor.Speciality}}"  class="form-control form-control-lg">
+                                <label class="form-label" for="Speciality">Speciality</label>
+                         
+                            </div>
+        
+                        </div>
+      
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline" style="display:flex;flex-direction: column">
+                          
+                            <input type="text" name="Role" placeholder="{{Doctor.Role}}"  class="form-control form-control-lg">
+                            <label class="form-label" for="Role">Role</label>
+                         
+                        </div>
+        
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                              
+                                <input type="email" name="CellNumber" placeholder="{{Doctor.CellNumber}}" class="form-control form-control-lg">
+                                <label class="form-label" for="CellNumber">Cell Number</label>
+                         
+                            </div>
+        
+                        </div>
+      
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline" style="display:flex;flex-direction: column">
+                            
+                            <input type="email" name="EmailAddress" placeholder="{{Doctor.EmailAddress}}"  class="form-control form-control-lg">
+                            <label class="form-label" for="EmailAddress">Email Address</label>
+                         
+                        </div>
+        
+                        </div>
+                    </div>
+    
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                              
+                                <input type="text" name="WorkAddress" placeholder="{{Doctor.WorkAddress}}" class="form-control form-control-lg">
+                                <label class="form-label" for="WorkAddress">Work Address</label>
+                         
+                            </div>
+        
+                        </div>
+                        
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline" style="display:flex;flex-direction: column">
+                            
+                            <input type="text" name="WorkTel" placeholder="{{Doctor.WorkTel}}"  class="form-control form-control-lg">
+                            <label class="form-label" for="WorkTel">Work Telephone</label>
+                        
+                        </div>
+        
+                        </div>
+                    </div>
+                    
+
+                    <input class="btn btn-default btn-primary" style="width:100%" type="submit" value="Save and update information"/>
+                    
+                    {% if place == "OnCreate" %}
+                        <br/>
+                        <br/>
+                        <a href="{% url 'ToChoose' id=person.personId %}" class="btn btn-default btn-primary" style="background-color:green;width:100%">
+                            You may proceed to the next step
+                        </a>
+                    {% endif %}
+                
+                </form>
+            
+            </div>
+            
+        </div>
+    </div>
+</center>
+
+
+{% endblock %}

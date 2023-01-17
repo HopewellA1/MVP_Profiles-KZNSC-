@@ -1,0 +1,209 @@
+{% extends "manageProfile/base.html" %}
+
+{% block content %}
+{% load static %}
+
+
+<style>
+
+    .form-control{
+        border:solid 2px;
+    }
+    .table{
+        width:100%;
+        border:solid 2px;
+    }
+
+</style>
+<hr/>
+{% if messages %}
+{% for message in messages %}
+  <div>
+    <center>
+        <div style="padding:1rem; background-color:green;color:white">
+          <p>
+              <h3><b>{{ message }}</b></h3>
+          </p>
+        </div>
+      </center>
+    </div>
+
+{% endfor %}
+{% endif %}
+<center>
+    <div >
+  
+        <div>
+            <div class="card-body p-4 p-md-5" style="border:solid 1px">
+                <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Add employment information</h3>
+                <form method="post" action"addEmployment">
+                    {% csrf_token %}
+                    <!--person-->
+                  
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                              
+                                <input type="text" required name="CompanyName" placeholder="Company Name"  class="form-control form-control-lg">
+                                <label class="form-label" for="CompanyName">Company Name</label>
+                         
+                            </div>
+        
+                        </div>
+      
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline" style="display:flex;flex-direction: column">
+                            
+                            <input type="text" required name="CompanyAddress" placeholder="Company Address"  class="form-control form-control-lg">
+                            <label class="form-label" for="CompanyAddress">Company Address</label>
+                         
+                        </div>
+        
+                        </div>
+                    </div>
+    
+    
+    
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                                
+                                <input type="date" required name="StartDate" placeholder="Start Date"  class="form-control form-control-lg">
+                                <label class="form-label" for="StartDate">Start date</label>
+                         
+                            </div>
+        
+                        </div>
+      
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline" style="display:flex;flex-direction: column">
+                          
+                            
+                                <input class="form-control form-control-lg" type="date" name="EndDate" />
+                                <label class="form-label" for="EndDate">End date</label>
+                            
+                         
+                            </div>
+      
+                        </div>
+                        
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                              
+                                <input type="text" name="Telephone" required placeholder="Telephone number"  class="form-control form-control-lg">
+                                <label class="form-label" for="Telephone">Telephone</label>
+                         
+                            </div>
+        
+                        </div>
+      
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline" style="display:flex;flex-direction: column">
+                            
+                            <input type="text" name="WorkPosition" placeholder="Work Position" required  class="form-control form-control-lg">
+                            <label class="form-label" for="WorkPosition">Work Position</label>
+                         
+                        </div>
+        
+                        </div>
+                    </div>
+
+                    <div class="container" style="display:flex;flex-direction: column; justify-content:center">
+                        <label style="color:green" class="form-label" for="Completed"><b>Currently Working</b></label>
+                        
+                        <input style="border:solid 3px green" type="checkbox" name="CurrentlyWorking" class=""/>
+                    </div>
+                    <br/>
+                   <div>
+                    <input class="form-control form-control-lg" placeholder="Skills" type="text" name="Skills" required />
+                    <label class="form-label" for="Skills">Skills</label>
+                   </div>
+                    <br/>
+                    <input class="btn btn-default btn-primary" style="width:100%" type="submit" value="Save information"/>
+                    
+                    {% if employments %}
+                        <div>
+                            <hr/>
+                                <a href="{% url 'addDoctor' personId=person.personId %}" class="btn btn-default btn-primary" style="width:100%;background-color:green">
+                                    Continue to the next step
+                                </a>
+                                <hr/>
+                            <div>
+                                <h3><b>Employment achievements</b></h3>
+                            </div>
+                   
+                            <table class="table" >
+                                <tr>
+                                    <th> Company Name</th>
+                                    <th>Company Address</th>
+                                    <th>Currently Working</th>
+                                    <th>Work Position?</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Telephone</th>
+                                    <th>Skills</th>
+                                </tr>
+                                
+                                {% for item in employments %}
+
+                                    <tr>
+                                        <td>{{item.CompanyName}}</td>
+                                        <td>{{item.CompanyAddress}}</td>
+                                        <td>
+                                        
+                                            {% if item.CurrentlyWorking == True %}
+                                                Yes
+                                            {% else %}
+                                                No
+                                            {% endif %}
+
+                                        
+                                        </td>
+
+                                        <td>{{item.WorkPosition}}</td>
+                                        <td>{{item.StartDate}}</td>
+                                        <td>{{item.EndDate}}</td>
+                                        <td>{{item.Telephone}}</td>
+                                        <td>{{item.Skills}}</td>
+                                      
+                                        <td>
+                                            <a href="{% url 'updateEmployment' employmentId=item.Employment_id place="OnCreate" %}" >Edit</a> |
+                                            <!--#(request, educationId, place)-->
+                                            <a href="{% url 'removeEmployment' employmentId=item.Employment_id place="OnCreate" %}" >remove</a>
+                                        </td>
+                                    </tr>
+
+                                {% endfor %}
+                            </table>
+                        </div>
+                       
+                    {% endif %}
+                
+                </form>
+            
+            </div>
+            
+        </div>
+    </div>
+</center>
+
+
+{% endblock %}

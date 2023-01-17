@@ -1,0 +1,233 @@
+{% extends "manageProfile/base.html" %}
+
+{% block content %}
+{% load static %}
+
+
+<style>
+
+    .form-control{
+        border:solid 2px;
+    }
+
+
+</style>
+<div class="container text-center">
+    <div>
+        <h3><b>Creating Person to create profile</b></h3>
+    </div>
+</div>
+<hr/>
+{% if messages %}
+{% for message in messages %}
+  <div>
+    <center>
+        <div style="padding:1rem; background-color:green;color:white">
+          <p>
+              <h3><b>{{ message }}</b></h3>
+          </p>
+        </div>
+      </center>
+    </div>
+
+{% endfor %}
+{% endif %}
+<center>
+    <div >
+  
+        <div>
+            <div class="card-body p-4 p-md-5" style="border:solid 1px">
+                <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Personal information Registration Form</h3>
+                <form method="post" action"updateNextOfKin">
+                    {% csrf_token %}
+                    <!--ethnicity-->
+                  
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                              
+                                <input type="text" name="FirstName" placeholder="{{ nextofkin.FirstName}}"  class="form-control form-control-lg">
+                                <label class="form-label" for="FirstName">First name</label>
+                         
+                            </div>
+        
+                        </div>
+      
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline" style="display:flex;flex-direction: column">
+                            
+                            <input type="text" name="Surname" placeholder="{{ nextofkin.Surname}}"  class="form-control form-control-lg">
+                            <label class="form-label" for="Middlename">Surname</label>
+                         
+                        </div>
+        
+                        </div>
+                    </div>
+    
+    
+    
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                                
+                                <input type="text" name="Title" placeholder="{{ nextofkin.Title}}"  class="form-control form-control-lg">
+                                <label class="form-label" for="lastname">Title</label>
+                         
+                            </div>
+        
+                        </div>
+      
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline" style="display:flex;flex-direction: column">
+                          
+                            <select required name="Gender" class="form-control form-control-lg" style="display:flex;justify-centent:center">
+                                <option value="select"><b>Select</b></option> 
+                                <option style="width:100%" value="Male"><b>Male</b></option>
+                                <option value="Female"><b>Female</b></option>
+                                <option value="Other"><b>Other</b></option>
+                            </select>
+                           
+                            <label class="form-label" for="gender">Gender: <b>{{ nextofkin.Gender}}</b></label>
+                         
+                        </div>
+        
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                              
+                                <input type="email" name="EmailAddress" placeholder="{{ nextofkin.EmailAddress}}" class="form-control form-control-lg">
+                                <label class="form-label" for="EmailAddress">Email address</label>
+                         
+                            </div>
+        
+                        </div>
+      
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline" style="display:flex;flex-direction: column">
+                            
+                            <input type="text" name="PhoneNumber" placeholder="{{ nextofkin.PhoneNumber}}"  class="form-control form-control-lg">
+                            <label class="form-label" for="PhoneNumber">Phone number</label>
+                         
+                        </div>
+        
+                        </div>
+                    </div>
+    
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                              
+                                <input type="text" name="HomeAddress" placeholder="{{ nextofkin.HomeAddress}}" class="form-control form-control-lg">
+                                <label class="form-label" for="HomeAddress">Home address</label>
+                         
+                            </div>
+        
+                        </div>
+                        
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline" style="display:flex;flex-direction: column">
+                            
+                            <input type="text" name="WorkAddress" placeholder="{{ nextofkin.WorkAddress}}"  class="form-control form-control-lg">
+                            <label class="form-label" for="WorkAddress">Work address</label>
+                        
+                        </div>
+        
+                        </div>
+                    </div>
+                    
+
+                    
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                              
+                                <input type="text" name="Relationship" placeholder="{{ nextofkin.Relationship}}" class="form-control form-control-lg"/>
+                               
+                                <label class="form-label" for="Relationship">Relationship</label>
+                         
+                            </div>
+        
+                        </div>
+                        
+                       <!--Jobtitle-->
+                       
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline" style="display:flex;flex-direction: column">
+                                <input type="text" name="Jobtitle" placeholder="{{ nextofkin.Jobtitle}}" class="form-control form-control-lg"/>
+                               
+                               
+                                <label class="form-label" for="Jobtitle">Job title</label>
+                            
+                            </div>
+            
+                        </div>
+                    </div>
+
+
+                    
+                    <input type="text" name="JobDescription" placeholder="{{ nextofkin.JobDescription}}" class="form-control form-control-lg"/>
+                               
+                               
+                    <label class="form-label" for="JobDescription">Job description</label>
+
+
+
+
+
+
+                    <input class="btn btn-default btn-primary" style="width:100%" type="submit" value="Save and continue"/>
+                    {% if place == "OnView" %}
+                    <br/>
+                    <br/>
+                    <a href="{% url 'viewPerson' default="NextOfKin" AtheId=0 %}" class="btn btn-default btn-primary" style="width:100%; background-color:green" >
+                        <b>Back</b>
+                    </a>
+
+               {% endif  %}
+              
+
+
+
+                       
+               {% if place == "OnCreate" %}
+               <br/>
+               <br/>
+               <a href="{% url 'AddEducation' personId=person.personId %}" class="btn btn-default btn-primary" style="background-color:green;width:100%">
+                   You may proceed to the next step
+               </a>
+           {% endif %}
+                </form>
+            
+            </div>
+            
+        </div>
+    </div>
+</center>
+
+
+{% endblock %}

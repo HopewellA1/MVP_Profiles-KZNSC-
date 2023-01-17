@@ -1,66 +1,30 @@
 import json
 from django.contrib import messages
 from django.shortcuts import render,redirect,get_object_or_404,HttpResponse
-from .models import Athlete,Persons,Parent,Coach,Official
+from .models import Athlete,Parent,Coach,Official
 from django.utils.dateparse import parse_date
 from datetime import date, datetime
 from django.contrib.auth.decorators import login_required
 from .serialization import Serializationclass
 from rest_framework import generics,filters#,viewsets
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from ManagePersonal.views import getEducation,getEmployment
+from ManagePersonal.models import Persons,Nextofkin,Education,Employment,Doctorsinformation
 
-@login_required
-def personal(request, id):
-    user = request.user
-    if request.method == 'GET':
-        try:
-            person = get_object_or_404(Persons, user = user)
-            
-            p = Persons.objects.get(IdentityNumber = person.IdentityNumber)
-            if person:
-            
-                if id != "0":
-                    messages.success(request,f"Dear {person.FirstName} please add your athlate personal information")
-                    return render(request,'manageProfile/Personal.html', {"parent": id})
-                    
-                # try:
-                #     parentrof = get_object_or_404(Parent,personId = person)
-                #     return render(request,'manageProfile/Personal.html', {"parent": person.personId})
-                # except:
-                return render(request, 'manageProfile/ChooseProfile.html',{"person":person.personId})
-                
-                   
-            else:
-                print("\n\ndid!\n\n") 
-                
-                      
-        except:
-            return render(request,'manageProfile/Personal.html', {"parent": id})
-            
-        
-    if request.method == 'POST':
-        
-        
-       
-        if id != "0":
-            Person = Persons.objects.create(IdentityNumber = request.POST['IdentityNumber'],FirstName = request.POST['FirstName'])
-            p = Persons.objects.get(IdentityNumber = Person.IdentityNumber)
-            ParentPerson = get_object_or_404(Persons, pk = id)
-            
-            #parent = get_object_or_404(Parent, personId = Person)
-            messages.success(request,f"Dear { ParentPerson.FirstName}, Athlate personal information saved successfully please continue adding the required information below")
-            return redirect('creatProfile', id=p.personId, profile="Parent",parent=ParentPerson.personId)
-        else:
-            Person = Persons.objects.create(IdentityNumber = request.POST['IdentityNumber'],FirstName = request.POST['FirstName'], user = user)
-            p = Persons.objects.get(IdentityNumber = Person.IdentityNumber)
-            
-            return render(request, 'manageProfile/ChooseProfile.html',{"person": p.personId})
+
 
 def home(request):
 
     if request.method == 'GET':
-        return render(request,'manageProfile/home.html')
+        person =""
+        if request.user:
+            user = request.user
+            try:
+                person = get_object_or_404(Persons)
+            except:
+                pass
+        
+        return render(request,'manageProfile/home.html',{"person":person})
     if request.method == 'POST':
         Person = Persons.objects.create(IdentityNumber = request.POST['IdentityNumber'],FirstName = request.POST['FirstName'])
         p = Persons.objects.get(IdentityNumber = Person.IdentityNumber)
@@ -74,7 +38,7 @@ def home(request):
             
             
         return render(request, 'manageProfile/ChooseProfile.html',{"person": p.personId})
-
+@login_required
 def chooseProfile(request):
     if request.method == 'GET':
         return render(request, 'manageProfile/ChooseProfile.html')
@@ -304,6 +268,11 @@ def ViewInformation(request,id, profile):
 @login_required
 def viewPerson(request, default,AtheId):
     #ParentAthlete
+    #Athlete
+    #Parent
+    #Official
+    #Person
+    #
     if request.method == 'GET':
         Athletes = []
         Default = ""
@@ -313,8 +282,19 @@ def viewPerson(request, default,AtheId):
         if default == "ParentAthlete":
             AthleteProfile = get_object_or_404(Athlete,pk =AtheId)
             personalinfo = AthleteProfile.personId
+            eds = getEducation(personalinfo)
+            employments = getEmployment(personId=personalinfo.personId) 
+            nextOfKin = get_object_or_404(Nextofkin, personId = personalinfo.personId)
         else:
             personalinfo = get_object_or_404(Persons, user = user)
+            education =""
+            eds = getEducation(personalinfo)
+            employments = getEmployment(personId=personalinfo.personId) 
+            nextOfKin = get_object_or_404(Nextofkin, personId = personalinfo.personId)
+            try:
+                education = get_object_or_404(Education,personId = personalinfo)
+            except:
+                pass
        
         # getting all profile belonging to the person using try 
         try:
@@ -417,27 +397,39 @@ def viewPerson(request, default,AtheId):
          
          
             if item["type"] == default:
-                print(item)
+                
                 return render(request, 'manageProfile/viewPerson.html',
                     {
                          "Person":personalinfo,
                          "DefaultProfile": item["pl"],
                          "Athlets": Athletes,
                          "Default":default,
-                         "allPersonProfiles":allPersonProfiles
+                         "allPersonProfiles":allPersonProfiles,
+                         "education":education,
+                         "eds":eds,
+                         "employments":employments
                       
                          
                     }) 
-                
-                
+         #NextOfKin       
+        if default == "Person":
+            Default =  default
+        if default == "Education":
+            Default = default
+        if default == "Employment":
+            Default = default
+        if default == "NextOfKin":
+            Default = default
         return render(request, 'manageProfile/viewPerson.html',
                         {"Person":personalinfo,
                          "DefaultProfile": DefaultProfile,
                          "Athlets": Athletes,
                          "Default":Default,
                          "allPersonProfiles":allPersonProfiles,
-                      
-                         
+                         "education":education,
+                         "eds":eds,
+                         "employments":employments,
+                         "nextofkin":nextOfKin
                          })
        
             

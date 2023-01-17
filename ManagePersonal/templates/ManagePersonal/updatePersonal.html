@@ -1,0 +1,311 @@
+{% extends "manageProfile/base.html" %}
+
+{% block content %}
+{% load static %}
+
+
+<style>
+
+    .form-control{
+        border:solid 2px;
+    }
+
+
+</style>
+
+<hr/>
+{% if messages %}
+{% for message in messages %}
+  <div>
+    <center>
+        <div style="padding:1rem; background-color:green;color:white">
+          <p>
+              <h3><b>{{ message }}</b></h3>
+          </p>
+        </div>
+      </center>
+    </div>
+
+{% endfor %}
+{% endif %}
+<center>
+    <div >
+  
+        <div>
+            <div class="card-body p-4 p-md-5" style="border:solid 1px">
+                <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Personal information update Form</h3>
+                <form method="post" action"personal">
+                    {% csrf_token %}
+                    <!--ethnicity-->
+                    <input type="hidden" name="personId" value="{{person.personId}}"/>
+                    <div>
+                        <input type="text" name="IdentityNumber" placeholder="{{person.IdentityNumber}}"  class="form-control form-control-lg">
+                        <label class="form-label" for="IdentityNumber">Identity number</label>
+                     
+                    </div>
+                   <div style="display:flex;flex-direction:column">
+                        <select name="ethnicity" class="form-control form-control-lg">
+                            <option value="select"><b>select</b></option>
+                            <option value="Black"><b>Black</b></option>
+                            <option value="Indian"><b>Indian</b></option>
+                            <option value="White"><b>White</b></option>
+                            <option value="Colored"><b>Colored</b></option>
+                            <option value="Asian"><b>Asian</b></option>
+                        </select>
+                    
+                        <label class="form-label" for="ethnicity">Ethnicity: <b> {{ person.ethnicity }}</b></label>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                              
+                                <input type="text" name="FirstName" placeholder=" {{ person.FirstName }}"  class="form-control form-control-lg">
+                                <label class="form-label" for="FirstName">First name</label>
+                         
+                            </div>
+        
+                        </div>
+      
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline" style="display:flex;flex-direction: column">
+                            
+                            <input type="text" name="Middlename" placeholder="{{ person.Middlename }}"  class="form-control form-control-lg">
+                            <label class="form-label" for="Middlename">Middle name</label>
+                         
+                        </div>
+        
+                        </div>
+                    </div>
+    
+    
+    
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                                
+                                <input type="text" name="lastname" placeholder="{{ person.lastname }}"  class="form-control form-control-lg">
+                                <label class="form-label" for="lastname">Last name</label>
+                         
+                            </div>
+        
+                        </div>
+      
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline" style="display:flex;flex-direction: column">
+                          
+                            <select required name="gender" class="form-control form-control-lg" style="display:flex;justify-centent:center">
+                                <option style="width:100%" value="select"><b>Select</b></option>
+                                <option style="width:100%" value="Male"><b>Male</b></option>
+                                <option value="Female"><b>Female</b></option>
+                                <option value="Other"><b>Other</b></option>
+                            </select>
+                           
+                            <label class="form-label" for="gender">Gender: <b>{{ person.gender }}</b></label>
+                         
+                        </div>
+        
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                              
+                                <input type="email" name="email" placeholder="{{ user.email }}" class="form-control form-control-lg">
+                                <label class="form-label" for="FirstName">Email address</label>
+                         
+                            </div>
+        
+                        </div>
+      
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline" style="display:flex;flex-direction: column">
+                            
+                            <input type="text" name="altemail" placeholder="{{ person.altemail }}"  class="form-control form-control-lg">
+                            <label class="form-label" for="altemail">Alternate email address</label>
+                         
+                        </div>
+        
+                        </div>
+                    </div>
+    
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                              
+                                <input type="text" name="cellphone" placeholder="{{ person.cellphone }}" class="form-control form-control-lg">
+                                <label class="form-label" for="cellphone">cellphone number</label>
+                         
+                            </div>
+        
+                        </div>
+                        
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline" style="display:flex;flex-direction: column">
+                            
+                            <input type="text" name="altcellphone" placeholder="{{ person.altcellphone }}"  class="form-control form-control-lg">
+                            <label class="form-label" for="altcellphone">Alternate cellphone number</label>
+                        
+                        </div>
+        
+                        </div>
+                    </div>
+                    
+
+                    
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                              
+                                <input type="text" name="physicaladdress1" placeholder="{{ person.physicaladdress1 }}" class="form-control form-control-lg"/>
+                               
+                                <label class="form-label" for="physicaladdress1">physical address 1</label>
+                         
+                            </div>
+        
+                        </div>
+                        
+                       <!---->
+                       
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline" style="display:flex;flex-direction: column">
+                                <input type="text" name="physicaladdress2" placeholder="{{ person.physicaladdress2 }}" class="form-control form-control-lg"/>
+                               
+                               
+                                <label class="form-label" for="altcellphone">physical address 2</label>
+                            
+                            </div>
+            
+                        </div>
+                    </div>
+
+
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline" style="display:flex;flex-direction:column">
+                              
+                                 
+                                <select required name="disability" class="form-control form-control-lg" style="width:400px">
+                                    <option  value="select"><b>Select</b></option>
+                                    <option  value="No"><b>No</b></option>
+                                    <option value="Yes"><b>Yes</b></option>
+                                  
+                                </select>
+                               
+                                <label class="form-label">Disability: <b> {{ person.disability }}</b></label>
+                            
+
+
+                                
+                            </div>
+        
+                        </div>
+      
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline" style="display:flex;flex-direction: column">
+                                <input type="text" name="disabilitydescription"   class="form-control form-control-lg"
+                                {% if person.disabilitydescription %}
+                                    placeholder="{{ person.disabilitydescription }}"
+                                {% else %}
+                                placeholder="No disability"
+                                {% endif %}
+                                
+                                />
+                                <label class="form-label" for="disabilitydescription">Disability description</label>
+                            </div>
+        
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                              
+                                <input type="number" name="tracksuitsize" placeholder="{{ person.tracksuitsize }}" class="form-control form-control-lg"/>
+                                <label class="form-label" for="tracksuitsize">Track suit size</label>
+                         
+                            </div>
+        
+                        </div>
+                        
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline" style="display:flex;flex-direction: column">
+                                
+                                <input type="number" name="shoesize" placeholder="{{ person.shoesize }}"  class="form-control form-control-lg"/>
+                                <label class="form-label" for="shoesize">Shoe size</label>
+                            
+                            </div>
+            
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+
+                    
+                    <input type="hidden"
+                     {% if parent %}
+                        value="parent"
+                     {% endif %}
+                     name="parent"/>
+    
+                     <input type="hidden"
+                     {% if ParentPerson %}
+                        value="ParentPerson"
+                     {% endif %}
+                     name="parent"/>
+
+
+                    <input class="btn btn-default btn-primary" style="width:100%" type="submit" value="Save and continue"/>
+                    <br/>
+                    <br/>
+                     <a href="{% url 'viewPerson' default="Person"  AtheId=0 %}" style="width:100%;background-color:green;color:white" class="btn btn-primary btn-lg">
+                           Back to view Profile
+       
+                     </a>
+                </form>
+            
+            </div>
+            
+        </div>
+    </div>
+</center>
+
+
+{% endblock %}

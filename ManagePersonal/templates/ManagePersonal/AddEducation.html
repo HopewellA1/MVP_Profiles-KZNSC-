@@ -1,0 +1,158 @@
+{% extends "manageProfile/base.html" %}
+
+{% block content %}
+{% load static %}
+
+
+<style>
+
+    .form-control{
+        border:solid 2px;
+    }
+    .table{
+        width:100%;
+        border:solid 2px;
+    }
+
+</style>
+<hr/>
+{% if messages %}
+{% for message in messages %}
+  <div>
+    <center>
+        <div style="padding:1rem; background-color:green;color:white">
+          <p>
+              <h3><b>{{ message }}</b></h3>
+          </p>
+        </div>
+      </center>
+    </div>
+
+{% endfor %}
+{% endif %}
+<center>
+    <div >
+  
+        <div>
+            <div class="card-body p-4 p-md-5" style="border:solid 1px">
+                <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Add education information</h3>
+                <form method="post" action"AddEducation">
+                    {% csrf_token %}
+                    <!--ethnicity-->
+                  
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                              
+                                <input type="text" name="EducationLevel" placeholder="Education Level"  class="form-control form-control-lg">
+                                <label class="form-label" for="EducationLevel">Education Level</label>
+                         
+                            </div>
+        
+                        </div>
+      
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline" style="display:flex;flex-direction: column">
+                            
+                            <input type="text" name="SchoolAddress" placeholder="School Address"  class="form-control form-control-lg">
+                            <label class="form-label" for="SchoolAddress">School Address</label>
+                         
+                        </div>
+        
+                        </div>
+                    </div>
+    
+    
+    
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                                
+                                <input type="date" name="YearStarted" placeholder="YearStarted"  class="form-control form-control-lg">
+                                <label class="form-label" for="YearStarted">Start date</label>
+                         
+                            </div>
+        
+                        </div>
+      
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline" style="display:flex;flex-direction: column">
+                          
+                            
+                                <input class="form-control form-control-lg" type="date" name="YearEnd" />
+                                <label class="form-label" for="YearEnd">End date</label>
+                            
+                         
+                            </div>
+        <!--<label>End date</label><input type="date" name="YearEnd"/>-->
+                        </div>
+                        <div class="container" style="display:flex;flex-direction: column; justify-content:center">
+                            <label style="color:green" class="form-label" for="Completed"><b>Completed</b></label>
+                            
+                            <input style="border:solid 3px green" type="checkbox" name="Completed" class=""/>
+                        </div>
+                    </div>
+                    <br/>
+                    <input class="btn btn-default btn-primary" style="width:100%" type="submit" value="Save information"/>
+                    
+                    {% if educations %}
+                        <div>
+                            <hr/>
+                                <a href="{% url 'addEmployment' personId=person.personId %}" class="btn btn-default btn-primary" style="width:100%;background-color:green">
+                                    Continue to the next step
+                                </a>
+                                <hr/>
+                            <div>
+                                <h3><b>Academical achievements</b></h3>
+                            </div>
+                   
+                            <table class="table" >
+                                <tr>
+                                    <th> Education Level</th>
+                                    <th>Start date</th>
+                                    <th> End date</th>
+                                    <th> Completed?</th>
+                                    <th> Action</th>
+                                </tr>
+                                
+                                {% for item in educations %}
+
+                                    <tr>
+                                        <td>{{item.EducationLevel}}</td>
+                                        <td>{{item.YearStarted}}</td>
+                                        <td>{{item.YearEnd}}</td>
+
+                                        <td>{{item.Completed}}</td>
+                                        <td>
+                                            <a href="{% url 'updateEducation' educationId=item.education_id place="OnCreate" %}" >Edit</a> |
+                                            <!--#(request, educationId, place)-->
+                                            <a href="{% url 'removEducation' educationId=item.education_id  place="OnCreate" %}" >remove</a>
+                                        </td>
+                                    </tr>
+
+                                {% endfor %}
+                            </table>
+                        </div>
+                       
+                    {% endif %}
+                
+                </form>
+            
+            </div>
+            
+        </div>
+    </div>
+</center>
+
+
+{% endblock %}

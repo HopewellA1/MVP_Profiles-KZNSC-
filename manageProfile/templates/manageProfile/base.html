@@ -129,11 +129,11 @@
                     </button>
 
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        {% comment %} <ul class="nav navbar-nav ml-auto"style="color: black;">
+                      <ul class="nav navbar-nav ml-auto"style="color: black;">
                             <li class="nav-item active">
                                 <a class="nav-link" href="{% url 'home' %}" style="color: black;">Home</a>
                             </li>
-                            {% if user.is_authenticated %}
+                            {% comment %} {% if user.is_authenticated %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'logout' %}">Logout</a>
                              </li>
@@ -149,10 +149,10 @@
                                 </li>
 
                             {% endif %}
-                            
+                             {% endcomment %}
                            
                             
-                        </ul> {% endcomment %}
+                        </ul> 
                     </div>
                     
                 </div>
