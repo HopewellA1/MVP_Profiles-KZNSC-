@@ -1,0 +1,135 @@
+{% extends "manageProfile/base.html" %}
+
+{% block content %}
+{% load static %}
+
+
+<style>
+
+    .form-control{
+        border:solid 2px;
+    }
+
+
+</style>
+
+<hr/>
+{% if messages %}
+{% for message in messages %}
+  <div>
+    <center>
+        <div style="padding:1rem; background-color:green;color:white">
+          <p>
+              <h3><b>{{ message }}</b></h3>
+          </p>
+        </div>
+      </center>
+    </div>
+
+{% endfor %}
+{% endif %}
+<center>
+    <div >
+  
+        <div>
+            <div class="card-body p-4 p-md-5" style="border:solid 1px">
+                <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Update achievement record</h3>
+                <form method="post" action"updateAchievement">
+                    {% csrf_token %}
+                    <!--ethnicity-->
+                    <div>
+                        <input type="text" name="NameOfAchievement" value="{{achievement.NameOfAchievement}}"  class="form-control form-control-lg">
+                        <label class="form-label" for="NameOfAchievement">Name of achievement</label>
+                     
+                    </div>
+            
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                              
+                                <input type="text" name="TypeOfAchievement" value="{{achievement.TypeOfAchievement}}"   class="form-control form-control-lg">
+                                <label class="form-label" for="TypeOfAchievement">Type of achievement</label>
+                         
+                            </div>
+        
+                        </div>
+      
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline" style="display:flex;flex-direction: column">
+                            
+                            <input type="text" name="Organization" value="{{achievement.Organization}}"  class="form-control form-control-lg">
+                            <label class="form-label" for="Organization">Organization</label>
+                         
+                        </div>
+        
+                        </div>
+                    </div>
+    
+    
+    
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+          <!--<input type="text" placeholder="MM/DD/YYYY"
+                    onfocus="(this.type='date')">-->
+                            <div class="form-outline">
+                                
+                                <input type="text" onfocus="(this.type='date')"  name="YearOfAchievement" placeholder="{{achievement.YearOfAchievement}}"  class="form-control form-control-lg">
+                                <label class="form-label" for="YearOfAchievement">Year of achievement</label>
+                         
+                            </div>
+        
+                        </div>
+      
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline" style="display:flex;flex-direction: column">
+                          
+                            <input type="text" name="Certificate" value="{{achievement.Certificate}}"  class="form-control form-control-lg">
+                            <label class="form-label" for="Certificate">Certificate</label>
+                         
+                        </div>
+        
+                        </div>
+                    </div>
+
+                    <input class="btn btn-default btn-primary" style="width:100%" type="submit" value="Save Information"/>
+                    {% if place == "OnCreate" %}
+                        <br/>
+                        <br/>
+                        <a style="width:100%;background-color:green" href="{% url 'addAchievements' profileId=profile type=type place=place %}" class="btn btn-default btn-primary">
+                            back
+                        </a>
+
+
+                    {% endif %}
+                    {% if place == "OnView" %}
+                        <br/>
+                        <br/>
+                        <a style="width:100%;background-color:green" href="{% url 'viewPerson' default=type AtheId=0 %}" class="btn btn-default btn-primary">
+                            back
+                        </a>
+
+
+                    {% endif %}
+                
+                </form>
+            
+            </div>
+            
+        </div>
+    </div>
+</center>
+
+
+
+  
+  
+{% endblock %}

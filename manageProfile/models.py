@@ -72,4 +72,18 @@ class Official(models.Model):
     
     
     
-    
+class Achievement(models.Model):
+    AchievementId = models.AutoField(db_column='AchievementId', primary_key=True)
+    TypeOfAchievement = models.CharField(db_column='TypeOfAchievement', max_length=50)
+    NameOfAchievement = models.CharField(db_column='NameOfAchievement', max_length=50)
+    Organization = models.CharField(db_column='Organization', max_length=50)
+    YearOfAchievement = models.DateField(db_column='YearOfAchievement', blank=True, null=True, default='<jamming-date>')
+    Certificate = models.CharField(db_column='Certificate', max_length=50)
+  
+   # ExecutiveID = models.IntegerField(db_column='ExecutiveID', blank=True, null=True)
+    #ExecutiveID = models.IntegerField(db_column='ExexutiveID', blank=True, null=True)
+    OfficialID = models.ForeignKey(Official, on_delete=models.CASCADE ,blank=True, null=True)
+    CoachID = models.ForeignKey(Coach, on_delete=models.CASCADE,blank=True, null=True)
+    AthleteID = models.ForeignKey(Athlete, on_delete=models.CASCADE,blank=True, null=True)
+    class Meta:
+        db_table = 'Achievements'

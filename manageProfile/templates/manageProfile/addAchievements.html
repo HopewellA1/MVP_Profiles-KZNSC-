@@ -1,0 +1,158 @@
+{% extends "manageProfile/base.html" %}
+
+{% block content %}
+{% load static %}
+
+
+<style>
+
+    .form-control{
+        border:solid 2px;
+    }
+
+
+</style>
+
+<hr/>
+{% if messages %}
+{% for message in messages %}
+  <div>
+    <center>
+        <div style="padding:1rem; background-color:green;color:white">
+          <p>
+              <h3><b>{{ message }}</b></h3>
+          </p>
+        </div>
+      </center>
+    </div>
+
+{% endfor %}
+{% endif %}
+<center>
+    <div >
+  
+        <div>
+            <div class="card-body p-4 p-md-5" style="border:solid 1px">
+                <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Add any Achievements you may have</h3>
+                <form method="post" action"addAchievements">
+                    {% csrf_token %}
+                    <!--ethnicity-->
+                    <div>
+                        <input type="text" name="NameOfAchievement" placeholder="Name of achievement"  class="form-control form-control-lg">
+                        <label class="form-label" for="NameOfAchievement">Name of achievement</label>
+                     
+                    </div>
+              
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                              
+                                <input type="text" name="TypeOfAchievement" placeholder="Type of achievement"  class="form-control form-control-lg">
+                                <label class="form-label" for="TypeOfAchievement">Type of achievement</label>
+                         
+                            </div>
+        
+                        </div>
+      
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline" style="display:flex;flex-direction: column">
+                            
+                            <input type="text" name="Organization" placeholder="Organization"  class="form-control form-control-lg">
+                            <label class="form-label" for="Organization">Organization</label>
+                         
+                        </div>
+        
+                        </div>
+                    </div>
+    
+    
+    
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                                
+                                <input type="date" name="YearOfAchievement" placeholder="Year of achievement"  class="form-control form-control-lg">
+                                <label class="form-label" for="YearOfAchievement">Year of achievement</label>
+                         
+                            </div>
+        
+                        </div>
+      
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline" style="display:flex;flex-direction: column">
+                          
+                            <input type="text" name="Certificate" placeholder="Certificate"  class="form-control form-control-lg">
+                            <label class="form-label" for="Certificate">Certificate</label>
+                         
+                        </div>
+        
+                        </div>
+                    </div>
+
+                    <input class="btn btn-default btn-primary" style="width:100%" type="submit" value="Save Information"/>
+                </form>
+            
+            </div>
+            
+        </div>
+    </div>
+</center>
+
+<hr/>
+<a href="{% url 'viewPerson' default=type AtheId=0 %}" class="btn btn-default btn-primary" style="width:100%;background-color:green">
+   Finished?
+</a>
+<hr/>
+
+{% if AllAchievements %}
+                        <div>
+                          
+                            <div>
+                                <h3><b>{{type}} achievements</b></h3>
+                            </div>
+                   
+                            <table class="table" >
+                                <tr>
+                                    <th>Name</th>
+                                    <th> Achievement</th>
+                                    
+                                    <th>Organization</th>
+                                    <th> YearOfAchievement</th>
+                                    <th> Action</th>
+                                </tr>
+                                
+                                {% for item in AllAchievements %}
+
+                                    <tr>
+                                        <td>{{item.NameOfAchievement}}</td>
+                                        <td>{{item.TypeOfAchievement}}</td>
+                                        <td>{{item.Organization}}</td>
+
+                                        <td>{{item.YearOfAchievement}}</td>
+                                        <td>
+                                            <a href="{% url 'updateAchievement' id=item.AchievementId type=type place="OnCreate" %}" >Edit</a> |
+                                            <!--#(request, educationId, place)-->
+                                             <a href="{% url 'removeAchievement' id=item.AchievementId type=type place="OnCreate" %}" >remove</a>
+                                          
+                                        
+                                        </td>
+                                    </tr>
+
+                                {% endfor %}
+                            </table>
+                        </div>
+                       
+                    {% endif %}
+                
+  
+{% endblock %}

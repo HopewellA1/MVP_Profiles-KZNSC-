@@ -17,6 +17,12 @@ urlpatterns = [
    path('updateParent/<parentId>',views.updateParent, name="updateParent"),
    path('remove/<profId>/<type>',views.remove,name="remove"),
    path('createOfficial',views.createOfficial,name="createOfficial"),
-   path('updateOfficial/<PersonId>',views.updateOfficial, name="updateOfficial")
+   path('updateOfficial/<PersonId>',views.updateOfficial, name="updateOfficial"),
+   
+   path('addAchievements/<profileId>/<type>/<place>',views.addAchievements,name="addAchievements"),
+   path('updateAchievement/<id>/<type>/<place>', views.updateAchievement, name="updateAchievement")
+   ,path('removeAchievement/<id>/<type>/<place>', views.removeAchievement, name="removeAchievement")
+   
+   
    
 ]

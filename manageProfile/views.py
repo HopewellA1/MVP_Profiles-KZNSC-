@@ -1,7 +1,7 @@
 import json
 from django.contrib import messages
 from django.shortcuts import render,redirect,get_object_or_404,HttpResponse
-from .models import Athlete,Parent,Coach,Official
+from .models import Athlete,Parent,Coach,Official,Achievement
 from django.utils.dateparse import parse_date
 from datetime import date, datetime
 from django.contrib.auth.decorators import login_required
@@ -113,7 +113,14 @@ def creatProfile(request,id, profile, parent):
 
        # person = Persons.objects.get()
         #athlate = Athlete.objects.create()
+       
+        return redirect('addAchievements',profileId = prof.AthleteID,type="Athlete",place="OnCreate")
+       
         return redirect('viewPerson', default="Athlete",AtheId=0)
+       
+       
+       
+       
        # return redirect('ViewInformation', id=Person.personId, profile="Athlate")
        # return render(request, 'manageProfile/CreateProfile.html',{"profile":prof})
 
@@ -349,12 +356,13 @@ def viewPerson(request, default,AtheId):
                 Default = "Athlete"
             pr = { "type": "Athlete",
                     "Default": athletetProfile.Default,
-                    "pl":athletetProfile
+                    "pl":athletetProfile,
+                    "id":athletetProfile.AthleteID
                   }
             if athletetProfile.Status == "Active":
                 allPersonProfiles.append(pr)
                 numProf +=1
-       
+            AllAchievements = getAchievement(athletetProfile.AthleteID,Default)
             pass
         except:
             pass
@@ -368,10 +376,12 @@ def viewPerson(request, default,AtheId):
             
             pr = { "type": "Coach",
                     "Default": coachProfile.Default,
-                    "pl":coachProfile
+                    "pl":coachProfile,
+                    "id":coachProfile.CoachID
                   }
             if coachProfile.Status == "Active":
                 allPersonProfiles.append(pr)
+            AllAchievements = getAchievement(coachProfile.CoachID,Default)
         except:
             pass
         
@@ -385,10 +395,12 @@ def viewPerson(request, default,AtheId):
             
             pr = { "type": "Official",
                     "Default": officialProfile.Default,
-                    "pl":officialProfile
+                    "pl":officialProfile,
+                    "id":officialProfile.OfficialID
                   }
             if officialProfile.Status == "Active":
                 allPersonProfiles.append(pr)
+            AllAchievements = getAchievement(officialProfile.OfficialID,Default)
         except:
             pass
         print(f"Number of profiles: {numProf}")
@@ -398,6 +410,8 @@ def viewPerson(request, default,AtheId):
          
             if item["type"] == default:
                 
+            
+                AllAchievements = getAchievement(item["id"],item["type"])
                 return render(request, 'manageProfile/viewPerson.html',
                     {
                          "Person":personalinfo,
@@ -407,7 +421,8 @@ def viewPerson(request, default,AtheId):
                          "allPersonProfiles":allPersonProfiles,
                          "education":education,
                          "eds":eds,
-                         "employments":employments
+                         "employments":employments,
+                         "AllAchievements":AllAchievements
                       
                          
                     }) 
@@ -429,7 +444,8 @@ def viewPerson(request, default,AtheId):
                          "education":education,
                          "eds":eds,
                          "employments":employments,
-                         "nextofkin":nextOfKin
+                         "nextofkin":nextOfKin,
+                         "AllAchievements":AllAchievements
                          })
        
             
@@ -474,6 +490,7 @@ def CreateCoach(request,id):
         Person.NumProfile += 1
         Person.save()
         messages.success(request,f"Dear {coach.personId.FirstName} you have succeessfully created the coach profile")
+        return redirect('addAchievements',profileId = coach.CoachID,type="Coach",place="OnCreate")
         return redirect('viewPerson', default = "Coach",AtheId = 0)
     
     
@@ -804,6 +821,7 @@ def createOfficial(request):
         Person.NumProfile += 1
         Person.save()
         messages.success(request,f"Dear {official.personId.FirstName} you have succeessfully created the official profile")
+        return redirect('addAchievements',profileId = official.OfficialID,type="Official",place="OnCreate")
         return redirect('viewPerson', default = "Official",AtheId = 0)    
         
         
@@ -895,5 +913,183 @@ def updateOfficial(request,PersonId):
         
         
         
+#Adding Achievements
+@login_required
+def addAchievements(request, profileId, type, place):
+    AllAchievements = getAchievement(profileId,type)
+    if type =="Athlete":
+        profile = get_object_or_404(Athlete, pk = profileId)
+    if type =="Coach":
+        profile = get_object_or_404(Coach, pk = profileId)
+    if type =="Official":
+        profile = get_object_or_404(Official, pk = profileId)
         
+    if request.method == "GET":
+        
+        
+        return render(request, 'manageProfile/addAchievements.html',{"profile":profile,"person":profile.personId,"type":type,"place":place,"AllAchievements":AllAchievements})
+    
+    
+    
+    if request.method =='POST':
+        
+        achievement = Achievement.objects.create(
+            TypeOfAchievement = request.POST["TypeOfAchievement"],
+            NameOfAchievement = request.POST["NameOfAchievement"],
+            Organization = request.POST["Organization"],
+            YearOfAchievement = request.POST["YearOfAchievement"],
+            Certificate = request.POST["Certificate"],
+            
+            
+        )
+        a = achievement
+        if type =="Athlete":
+            profile = get_object_or_404(Athlete, pk = profileId)
+            a.AthleteID = profile
+            id = profile.AthleteID
+        if type =="Coach":
+            profile = get_object_or_404(Coach, pk = profileId)
+            a.CoachID = profile
+            id = profile.CoachID
+        if type =="Official":
+            profile = get_object_or_404(Official, pk = profileId)
+            a.OfficialID = profile
+            id = profile.OfficialID
+        a.save()
+        
+        messages.success(request,"You have added the achievement successfully, you may add more if posible")
+        
+        return redirect('addAchievements', profileId = id, type =type,place =place)
+        
+
+#updating achievement
+@login_required
+def updateAchievement(request, id,type, place):
+    achievement = get_object_or_404(Achievement,pk = id)
+    profID  = getProfileID(achievement, type)
+  
+    if request.method =='GET':
+        
+        
+        return render(request,'manageProfile/updateAchievement.html',{"achievement":achievement,"type":type,"place":place,"profile":profID})
+    
+    if request.method =='POST':
+        
+        
+        numUpdates = 0
+        if request.POST["NameOfAchievement"] != achievement.NameOfAchievement:
+            achievement.NameOfAchievement = request.POST["NameOfAchievement"]
+            numUpdates += 1
+            
+        if request.POST["TypeOfAchievement"] != achievement.TypeOfAchievement:
+            achievement.TypeOfAchievement = request.POST["TypeOfAchievement"]
+            numUpdates += 1
+            
+        if request.POST["Organization"] != achievement.Organization:
+            achievement.Organization = request.POST["Organization"]
+            numUpdates += 1
+           
+           
+          # date_str = '09-19-2022'
+
+            #date_object = datetime.strptime(date_str, '%m-%d-%Y').date()
+           
+        if request.POST["Certificate"] == achievement.Certificate:
+            pass
+        else:
+            achievement.Certificate = request.POST["Certificate"]
+            numUpdates += 1
+            
+        if numUpdates > 0:
+            achievement.save()
+           
+        else:
+            pass   
+     
+        print("\n\nAnother\n\n")
+        print(achievement.YearOfAchievement)
+        try:
+            if request.POST["YearOfAchievement"] == achievement.YearOfAchievement:
+                
+                pass
+            else:
+                
+                achievement.YearOfAchievement = request.POST["YearOfAchievement"]
+                achievement.save()
+                numUpdates += 1
+        except:
+            pass
+        
+        if request.POST["Certificate"] == achievement.Certificate:
+            pass
+        else:
+            achievement.Certificate = request.POST["Certificate"]
+            numUpdates += 1
+            
+        if numUpdates > 0:
+            
+            messages.success(request,f"Changes to {achievement.NameOfAchievement} made successfully.")
+        else:
+            messages.error(request,"No changes made on the record.")       
+         
+        return redirect('updateAchievement',id= achievement.AchievementId, type =type,place=place)
+
+
+
+
+
+def getProfileID(Achievement, type):
+    
+    if type =="Athlete":
+            profile = Achievement.AthleteID.AthleteID
+            
+    if type =="Coach":
+        profile = Achievement.CoachID.CoachID
+       
+    if type =="Official":
+        profile = Achievement.OfficialID.OfficialID
+        
+    return profile
+    
+#getting all achievements belonging to the profile
+def getAchievement(id, type):
+    achievements =[]
+    As = Achievement.objects.all()
+    for item in As:
+        if type =="Athlete":
+            profile = get_object_or_404(Athlete, pk = id)
+            if item.AthleteID == profile:
+                achievements.append(item)
+        if type =="Coach":
+            profile = get_object_or_404(Coach, pk = id)
+            if item.CoachID == profile:
+                achievements.append(item)
+        if type =="Official":
+            profile = get_object_or_404(Official, pk = id)
+            if item.OfficialID == profile:
+                achievements.append(item)
+        
+    
+    return achievements 
+
+
+#removing achievement
+@login_required
+def removeAchievement(request, id, type,place):
+    achievement = get_object_or_404(Achievement,pk = id)
+    profID  = getProfileID(achievement, type)
+  
+    if request.method =='GET':
+        
+        messages.warning(request,"Are you sure you want to remove this achievement record?")
+        return render(request,'manageProfile/removeAchievement.html',{"achievement":achievement,"type":type,"place":place,"profile":profID})
+    
+    if request.method =='POST':
+        achievement.delete()
+        messages.success(request, "Achievement record removed successfully")
+        if place =="OnCreate":
+            return redirect('addAchievements', profileId =profID,type =type,place=place)
+        
+        if place =="OnView":
+            return redirect('viewPerson', default =type,AtheId =0)
         

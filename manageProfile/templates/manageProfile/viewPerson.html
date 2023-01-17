@@ -821,4 +821,46 @@
 
 
 
+    {% if AllAchievements %}
+    <br/>
+    <br/>
+                        <div style="border:solid 3px green;padding:5px; width:100%">
+                          
+                            <div>
+                                <h3><b>{{type}} achievements</b></h3>
+                            </div>
+                   
+                            <table class="table" >
+                                <tr>
+                                    <th>Name</th>
+                                    <th> Achievement</th>
+                                    
+                                    <th>Organization</th>
+                                    <th> YearOfAchievement</th>
+                                    <th> Action</th>
+                                </tr>
+                                
+                                {% for item in AllAchievements %}
+
+                                    <tr>
+                                        <td>{{item.NameOfAchievement}}</td>
+                                        <td>{{item.TypeOfAchievement}}</td>
+                                        <td>{{item.Organization}}</td>
+
+                                        <td>{{item.YearOfAchievement}}</td>
+                                        <td>
+                                            <a href="{% url 'updateAchievement' id=item.AchievementId type=Default place="OnView" %}" >Edit</a> |
+                                            <!--#(request, educationId, place)-->
+                                             <a href="{% url 'removeAchievement' id=item.AchievementId type=Default place="OnView" %}" >remove</a>
+                                          
+                                        
+                                        </td>
+                                    </tr>
+
+                                {% endfor %}
+                            </table>
+                        </div>
+                       
+    {% endif %}
+                
 {% endblock %}
