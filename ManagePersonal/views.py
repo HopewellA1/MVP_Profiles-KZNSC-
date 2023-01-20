@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from ManagePersonal.models import Persons,Nextofkin,Education,Employment,Doctorsinformation,CustomField
 from manageProfile import views 
 from ManagePersonal.validate import calcControlDigit,validateID,getLastDigit
+from Login.models import Register
 # Create your views here.
 
 
@@ -36,6 +37,7 @@ def personal(request, id):
   
     user = request.user
     isParent = False
+    register = get_object_or_404(Register, user=user)
     if request.method == 'GET':
         try:
             person = get_object_or_404(Persons, user = user) 
@@ -44,8 +46,9 @@ def personal(request, id):
             if person:
             
                 if id != "0":
+                    
                     messages.success(request,f"Dear {person.FirstName} please add your athlate personal information")
-                    return render(request,'ManagePersonal/addPersonalInfo.html', {"parent": id})
+                    return render(request,'ManagePersonal/addPersonalInfo.html', {"parent": id,"register":register})
                     
                 isParent =  checkParent(p)
                 return render(request, 'manageProfile/ChooseProfile.html',{"person":person.personId, "isParent":isParent})
@@ -56,7 +59,7 @@ def personal(request, id):
                 
                       
         except:
-            return render(request,'ManagePersonal/addPersonalInfo.html', {"parent": id})
+            return render(request,'ManagePersonal/addPersonalInfo.html', {"parent": id,"register":register})
             
         
     if request.method == 'POST':
@@ -491,7 +494,7 @@ def removEducation(request, educationId, place):
     if request.method == 'GET':
         messages.error(request,"Are you sur you want to remove this record?")
         
-        return render(request, 'ManagePersonal/removEducation.html',{"education":education,"place":place})
+        return render(request, 'ManagePersonal/removEducation.html',{"education":education,"place":place,"Person":person})
     
     if request.method =='POST':
         education.delete()
@@ -566,7 +569,7 @@ def updateEmployment(request, employmentId,place):
     
     if request.method == 'GET':
         
-        return render(request, 'ManagePersonal/updateEmployment.html', {"employment":employment,"person":person,"place":place})
+        return render(request, 'ManagePersonal/updateEmployment.html', {"employment":employment,"person":person,"place":place,"Person":person})
     
     if request.method == 'POST':
         numUpdates = 0
@@ -611,7 +614,7 @@ def updateEmployment(request, employmentId,place):
         if numUpdates >0:
             
             employment.save()
-            messages.success(request,"YOu have updated the employment information successfully")
+            messages.success(request,"You have updated the employment information successfully")
         else:
             messages.error(request, "You did not make any changes on the record")
         
@@ -627,7 +630,7 @@ def removeEmployment(request, employmentId, place):
     
     if request.method =='GET':
         messages.error(request, "Are you sure you want to remove this record")
-        return render(request, 'ManagePersonal/removeEmployment.html',{"employment":employment,"person":person,"place": place})
+        return render(request, 'ManagePersonal/removeEmployment.html',{"employment":employment,"person":person,"place": place,"Person":person})
     
     if request.method =='POST':
         

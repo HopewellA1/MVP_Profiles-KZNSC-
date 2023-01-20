@@ -1,0 +1,81 @@
+
+{% extends "Login/base.html" %}
+
+{% block content %}
+{% load static %}
+{% if messages %}
+<div style="color:black;">
+  <center>
+    <p>
+      
+          {% for message in messages %}
+                <div>
+                  <p>
+                    {{ message }}
+                  </p>
+                </div>
+          {% endfor %}
+      
+    </p>
+  </center>
+  </div>
+  {% endif %}
+<div class="wrapper">
+        <!-- Sidebar Holder -->
+        
+        <link rel="stylesheet" href="{% static 'Login/css/style.css' %}">
+   
+        <!-- Page Content Holder -->
+        <div id="content">
+
+            <!-- <ul style="background-color: lime;height: 20px; margin-top: 0px; box-shadow: 2px;"></ul> -->
+            <div>
+                <center>
+               <img src="{% static 'Login/images/spo.jpg' %}" style="width:25%;height:20%"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+               <img src="{% static 'Login/images/sps.jpg' %}" style="width:25%;height:20%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+               <img src="{% static 'Login/images/spts.jpg' %}" style="width:25%;height:20%">
+            </center>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-sm-6">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">KZN SPORTS CONFEDERATIONS</h5>
+                      <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                      <a href="#" class="btn btn-primary">Go somewhere</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="card">
+                    <div class="card-body">
+                      <!-- <h5 class="card-title">KZN DISTRICTS</h5> -->
+                      <div class="faq">
+                        <h3>What is FAQ Page?</h3>
+                        <p>Lorem ipsum dolor sit amet, 
+               consectetur adipisicing elit, 
+               sed do eiusmod tempor incididunt u.</p>
+                    </div>
+                    <div class="faq">
+                        <h3>How can I use this FAQ page HTML template?</h3>
+                        <p>Lorem ipsum dolor sit amet, .</p>
+                    </div>
+                      {% comment %} <main>
+                        <header>
+                            <h5>Frequently Asked Questions</h5>
+                        </header>
+                        <section>
+                                
+                                
+                        </section>
+                    </main> {% endcomment %}
+                    </div>
+                  </div>
+                </div>
+</div>
+<br>
+
+               <!-- info section -->
+        
+{% endblock %}

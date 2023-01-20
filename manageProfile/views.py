@@ -5,9 +5,9 @@ from .models import Athlete,Parent,Coach,Official,Achievement
 from django.utils.dateparse import parse_date
 from datetime import date, datetime
 from django.contrib.auth.decorators import login_required
-from .serialization import Serializationclass
-from rest_framework import generics,filters#,viewsets
-from rest_framework.response import Response
+#from .serialization import Serializationclass
+#from rest_framework import generics,filters#,viewsets
+#from rest_framework.response import Response
 from ManagePersonal.views import getEducation,getEmployment,checkParent, getFieds
 from ManagePersonal.models import Persons,Nextofkin,Education,Employment,Doctorsinformation
 
@@ -63,12 +63,15 @@ def creatProfile(request,id, profile, parent):
         except:
             # if they don't have any of the above we let them continue to create
             pass
-        if request.session['process']:
-            if request.session["process"] =="Parent":
-                print(f"the parnt is: {parent}")
-                p = get_object_or_404(Persons, pk = parent)
-                messages.success(request,f"Dear , {p.FirstName} Athlate personal information saved successfully please continue adding the required information below")
-            
+        try:
+            if request.session['process']:
+                if request.session["process"] =="Parent":
+                    
+                    p = get_object_or_404(Persons, pk = parent)
+                    messages.success(request,f"Dear , {p.FirstName} Athlate personal information saved successfully please continue adding the required information below")
+        except:
+            pass
+              
         return render(request, 'manageProfile/CreateProfile.html',{"profile":prof, "parent":parent})
     if request.method=='POST':
         

@@ -1,0 +1,57 @@
+{% extends "Login/LoginBase.html" %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'Login/css/image.css' %}">
+<style>
+  .col {
+    width:100%%;
+
+  }
+</style>
+
+  <div class="container1">
+    {% if messages %}
+      {% for message in messages %}
+          <div>
+              <p>
+                  {{ message }}
+              </p>
+          </div>
+      {% endfor %}
+    {% endif %}
+    <div class="row">
+
+      <div class="col">
+        <form method="POST">
+          {% csrf_token %}
+          <div class="form-group">
+              <label for="username"><b>Enter Address</b></label>
+              <input placholder="example@gmail.com" type="text" name="username" class="form-control" id="username">
+          </div>
+          <div class="form-group">
+              <label for="password"><b>Enter Password</b></label>
+              <input type="password" name="password" class="form-control" id="password">
+          </div>
+          <input type="submit" value="Login" /> 
+          {% comment %} <button type="submit" class="btn btn-primary">Login</button> {% endcomment %}
+        </form>
+
+      </div>
+
+    </div>
+
+  </div>
+  <br><Br>
+    <div class="bottom-container">
+      <div class="row">
+        <div class="col">
+          <a href="{% url 'register' %}" style="color:white" class="btn">Sign up</a>
+        </div>
+        <div class="col">
+          <a href="{% url 'reset_password' %}" style="color:white" class="btn">Forgot password?</a>
+        </div>
+      </div>
+    </div>
+    <br>
+  {% endblock %}

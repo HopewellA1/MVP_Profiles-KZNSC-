@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import path
 from . import views
 urlpatterns = [
-   path('',views.home, name="home"),
+   #path('',views.home, name="home"),
    
    path('ChooseProfile', views.chooseProfile, name="ChooseProfile"),
    path('creatProfile/<id>/<profile>/<parent>',views.creatProfile, name="creatProfile"),

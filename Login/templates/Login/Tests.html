@@ -1,0 +1,19 @@
+
+{% extends "Login/base.html" %}
+
+{% block content %}
+{% load static %}
+
+<div>
+    <form method="POST">
+        {% csrf_token %}
+    <div>
+        <label> Date of birth</label>
+        <input type="date" required name="dateOfBirth" class="form-control"/>
+        <input type="submit" value="Submit"/>
+    
+    </form>
+</div>
+
+
+{% endblock %}

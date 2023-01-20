@@ -63,7 +63,7 @@
         
                             <div class="form-outline">
                               
-                                <input type="text" name="FirstName" placeholder="First name"  class="form-control form-control-lg">
+                                <input required type="text" name="FirstName" placeholder="First name"  class="form-control form-control-lg">
                                 <label class="form-label" for="FirstName">First name</label>
                          
                             </div>
@@ -76,7 +76,7 @@
         
                           <div class="form-outline" style="display:flex;flex-direction: column">
                             
-                            <input type="text" name="Middlename" placeholder="Middle name"  class="form-control form-control-lg">
+                            <input  type="text" name="Middlename" placeholder="Middle name"  class="form-control form-control-lg">
                             <label class="form-label" for="Middlename">Middle name</label>
                          
                         </div>
@@ -92,7 +92,7 @@
         
                             <div class="form-outline">
                                 
-                                <input type="text" name="lastname" placeholder="Last name"  class="form-control form-control-lg">
+                                <input required type="text" name="lastname" placeholder="Last name"  class="form-control form-control-lg">
                                 <label class="form-label" for="lastname">Last name</label>
                          
                             </div>
@@ -124,7 +124,7 @@
         
                             <div class="form-outline">
                               
-                                <input type="email" name="email" value="Email" class="form-control form-control-lg">
+                                <input required type="email" name="email" value="{{register.email}}" class="form-control form-control-lg">
                                 <label class="form-label" for="FirstName">Email address</label>
                          
                             </div>
@@ -151,7 +151,7 @@
         
                             <div class="form-outline">
                               
-                                <input type="text" name="cellphone" placeholder="cell phone number" class="form-control form-control-lg">
+                                <input required type="text" name="cellphone" value="{{register.phoneNumber}}" class="form-control form-control-lg">
                                 <label class="form-label" for="cellphone">cellphone number</label>
                          
                             </div>
@@ -180,7 +180,7 @@
         
                             <div class="form-outline">
                               
-                                <input type="text" name="physicaladdress1" placeholder="physical address 1" class="form-control form-control-lg"/>
+                                <input required type="text" name="physicaladdress1" placeholder="physical address 1" class="form-control form-control-lg"/>
                                
                                 <label class="form-label" for="physicaladdress1">physical address 1</label>
                          
@@ -245,7 +245,7 @@
         
                             <div class="form-outline">
                               
-                                <input type="text" name="tracksuitsize" placeholder="Track suit size" class="form-control form-control-lg"/>
+                                <input required type="text" name="tracksuitsize" placeholder="Track suit size" class="form-control form-control-lg"/>
                                 <label class="form-label" for="tracksuitsize">Track suit size</label>
                          
                             </div>
@@ -258,7 +258,7 @@
         
                             <div class="form-outline" style="display:flex;flex-direction: column">
                                 
-                                <input type="number" name="shoesize" placeholder="Shoe size"  class="form-control form-control-lg"/>
+                                <input required type="number" name="shoesize" placeholder="Shoe size"  class="form-control form-control-lg"/>
                                 <label class="form-label" for="shoesize">Shoe size</label>
                             
                             </div>
