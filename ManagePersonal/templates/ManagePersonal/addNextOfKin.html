@@ -12,11 +12,7 @@
 
 
 </style>
-<div class="container text-center">
-    <div>
-        <h3><b>Creating Person to create profile</b></h3>
-    </div>
-</div>
+
 <hr/>
 {% if messages %}
 {% for message in messages %}
@@ -38,6 +34,7 @@
         <div>
             <div class="card-body p-4 p-md-5" style="border:solid 1px">
                 <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Add next of kin information form</h3>
+                <hr/>
                 <form method="post" action"personal">
                     {% csrf_token %}
                     <!--ethnicity-->

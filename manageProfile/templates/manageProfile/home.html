@@ -44,7 +44,7 @@
         </div>
         <div style="padding:2rem">
             <a class="link" href="{% url 'personal' id=0 %}">Create a profile</a>
-            {% if person.personId %}
+            {% if person %}
 
             <a class="link" href="{% url 'viewPerson' default="none" AtheId=0 %}">My profiles and informations</a>
             {% endif %}

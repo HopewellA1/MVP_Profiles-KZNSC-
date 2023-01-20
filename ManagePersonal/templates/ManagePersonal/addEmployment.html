@@ -30,12 +30,23 @@
 
 {% endfor %}
 {% endif %}
+
+
+{% if OnCreate == True %}
+<a href="{% url 'addDoctor' personId=person.personId %}">
+    Skipt to the next step
+</a>
+{% else %}
+    
+{% endif %}
+
 <center>
     <div >
   
         <div>
             <div class="card-body p-4 p-md-5" style="border:solid 1px">
                 <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Add employment information</h3>
+                <hr/>
                 <form method="post" action"addEmployment">
                     {% csrf_token %}
                     <!--person-->
@@ -138,14 +149,26 @@
                    </div>
                     <br/>
                     <input class="btn btn-default btn-primary" style="width:100%" type="submit" value="Save information"/>
-                    
+                    {% if OnCreate == True   %}
+                    <br/>
+                <br/>
+                    <a href="{% url 'addDoctor' personId=person.personId %}" class="btn btn-default btn-primary" style="width:100%;background-color:green">
+                        Continue to the next step
+                    </a>
+                {% else %}
+                <br/>
+                <br/>
+                    <a href="{% url 'viewPerson' default="Employment" AtheId=0 %}" class="btn btn-default btn-primary" style="width:100%;background-color:green">
+                        Back
+                    </a>
+
+                {% endif %}
                     {% if employments %}
                         <div>
                             <hr/>
-                                <a href="{% url 'addDoctor' personId=person.personId %}" class="btn btn-default btn-primary" style="width:100%;background-color:green">
-                                    Continue to the next step
-                                </a>
+                       
                                 <hr/>
+
                             <div>
                                 <h3><b>Employment achievements</b></h3>
                             </div>

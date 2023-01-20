@@ -109,9 +109,18 @@
 </center>
 
 <hr/>
+{% if request.session.process %}
+    {% if request.session.process == "Parent" %}
+    <a href="{% url 'viewPerson' default="ParentAthlete" AtheId=profile.AthleteID %}" class="btn btn-default btn-primary" style="width:100%;background-color:green">
+        Finished?
+     </a>
+
+    {% endif %}
+{% else %}
 <a href="{% url 'viewPerson' default=type AtheId=0 %}" class="btn btn-default btn-primary" style="width:100%;background-color:green">
    Finished?
 </a>
+{% endif %}
 <hr/>
 
 {% if AllAchievements %}

@@ -14,24 +14,40 @@
     }
 
 </style>
+{% if p %}
+  {% if p.NumProfile > 0 %}
+    <a href="{% url 'viewPerson' default="none"  AtheId=0 %}">Back to default profile</a>
+  {% endif %}
+{% endif %}
+   
 <div>
-    <div class="row container" style="padding:5rem; display:flex;justify-content:center;align-content:center">
+    <div class="row container" style="padding:5rem; display:flex;flex-direction:row;justify-content:center;align-content:center">
 
         
-      <!--createOfficial-->
+      <!--createOfficial   style="padding:0.5rem;"-->
       <div style="padding:0.5rem;">
         <a class="link" href="{% url 'creatProfile' id=person profile="Athlate" parent=0 %}">Athlete</a>
       </div>
-      <div style="padding:0.5rem;">
-        <a class="link" href="{% url 'ParentInfo' id=person  %}">Parent</a>
-      </div style="padding:0.5rem;">
-      <div style="padding:0.5rem;">
+
+      <br/>
+      <br/>
+   
+      <div style="padding:0.5rem;" >
         <a class="link" href="{% url 'CreateCoach' id=person  %}">Coach</a>
-      </div style="padding:0.5rem;">
+      </div >
+      <br/>
+      <br/>
       <div style="padding:0.5rem;">
         <a class="link" href="{% url 'createOfficial'  %}">Official</a>
       </div>
-  
+
+      {% if isParent == False %}
+      <br/>
+      <br/>
+        <div style="padding:0.5rem;">
+          <a class="link" href="{% url 'ParentInfo' id=person  %}">Parent</a>
+        </div >
+    {% endif %}
     </div>
 </div>    
 

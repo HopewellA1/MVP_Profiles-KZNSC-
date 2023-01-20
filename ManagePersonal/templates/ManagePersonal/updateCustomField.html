@@ -1,0 +1,101 @@
+{% extends "manageProfile/base.html" %}
+
+{% block content %}
+{% load static %}
+
+
+<style>
+
+    .form-control{
+        border:solid 2px;
+    }
+    .table{
+        width:100%;
+        border:solid 2px;
+    }
+
+</style>
+<hr/>
+{% if messages %}
+{% for message in messages %}
+  <div>
+    <center>
+        <div style="padding:1rem; background-color:green;color:white">
+          <p>
+              <h3><b>{{ message }}</b></h3>
+          </p>
+        </div>
+      </center>
+    </div>
+
+{% endfor %}
+{% endif %}
+<center>
+    <div >
+  
+        <div>
+            <div class="card-body p-4 p-md-5" style="border:solid 1px">
+                <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">You may add any addition information you may have</h3>
+                <form method="post" action="updateCustomField">
+                    {% csrf_token %}
+                    <!--ethnicity-->
+                  
+                    <input type="hidden" name="place" value="{{place}}"/>
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                              
+                                <input type="text" name="FeildName" Value="{{customField.FeildName}}"  class="form-control form-control-lg">
+                                <label class="form-label" for="FeildName">Feild Name</label>
+                         
+                            </div>
+        
+                        </div>
+      
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline" style="display:flex;flex-direction: column">
+                            
+                            <input type="text" name="FeildValue" Value="{{customField.FeildValue}}"   class="form-control form-control-lg">
+                            <label class="form-label" for="FeildValue">Feild Value</label>
+                         
+                        </div>
+        
+                        </div>
+                    </div>
+    
+    
+    
+                    
+                    <br/>
+                    <input class="btn btn-default btn-primary" style="width:100%" type="submit" value="Save and update"/>
+                    
+                    {% if place == "OnCreate"  %}
+                    <br/>
+                    <br/>
+
+                        <a class="btn btn-default btn-primary" style="width:100%;background-color:green"     href="{% url 'addCustomField' personId=customField.personId.personId place=place %}">
+                            Back
+                        </a>
+                    {% endif %}
+                    {% if place == "OnView"  %}
+                    <br/>
+                    <br/>
+
+                        <a class="btn btn-default btn-primary" style="width:100%;background-color:green"     href="{% url 'viewPerson' default="Person" AtheId=0 %}">
+                            Back
+                        </a>
+                    {% endif %}
+                </form>
+            
+            </div>
+            
+        </div>
+    </div>
+</center>
+
+
+{% endblock %}

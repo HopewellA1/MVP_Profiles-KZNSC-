@@ -12,11 +12,7 @@
 
 
 </style>
-<div class="container text-center">
-    <div>
-        <h3><b>Creating Person to create profile</b></h3>
-    </div>
-</div>
+
 <hr/>
 {% if messages %}
 {% for message in messages %}
@@ -32,12 +28,13 @@
 
 {% endfor %}
 {% endif %}
+
 <center>
     <div >
   
         <div>
             <div class="card-body p-4 p-md-5" style="border:solid 1px">
-                <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Personal information Registration Form</h3>
+                <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Update naext of kin  </h3>
                 <form method="post" action"updateNextOfKin">
                     {% csrf_token %}
                     <!--ethnicity-->
@@ -200,7 +197,7 @@
 
 
 
-                    <input class="btn btn-default btn-primary" style="width:100%" type="submit" value="Save and continue"/>
+                    <input class="btn btn-default btn-primary" style="width:100%" type="submit" value="Save information"/>
                     {% if place == "OnView" %}
                     <br/>
                     <br/>

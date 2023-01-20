@@ -30,16 +30,46 @@
 
 {% endfor %}
 {% endif %}
-<center>
+{% if educations %}
+
+{% else %}
+    <a href="{% url 'addEmployment' personId=person.personId %}" >Skip to the next step</a>
+{% endif %}
+    <center>
     <div >
   
         <div>
             <div class="card-body p-4 p-md-5" style="border:solid 1px">
                 <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Add education information</h3>
+                <hr/>
                 <form method="post" action"AddEducation">
                     {% csrf_token %}
                     <!--ethnicity-->
-                  
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                              
+                                <input type="text" name="InstitutionName" placeholder="Institution Name"  class="form-control form-control-lg">
+                                <label class="form-label" for="InstitutionName">Institution Name</label>
+                         
+                            </div>
+        
+                        </div>
+      
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline" style="display:flex;flex-direction: column">
+                            
+                            <input type="text" name="HighestGrade" placeholder="Highest Grade Passed"  class="form-control form-control-lg">
+                            <label class="form-label" for="HighestGrade">Highest Grade Passed</label>
+                         
+                        </div>
+        
+                        </div>
+                    </div>
 
                     <div class="row">
                         <div class="col-md-6 mb-4">
@@ -108,9 +138,16 @@
                     {% if educations %}
                         <div>
                             <hr/>
+                            {% if OnCreate == True %}
                                 <a href="{% url 'addEmployment' personId=person.personId %}" class="btn btn-default btn-primary" style="width:100%;background-color:green">
                                     Continue to the next step
                                 </a>
+                            {% else %}
+                            <a href="{% url 'viewPerson' default="Education" AtheId=0 %}" class="btn btn-default btn-primary" style="width:100%;background-color:green">
+                                Back
+                            </a>
+
+                            {% endif %}
                                 <hr/>
                             <div>
                                 <h3><b>Academical achievements</b></h3>
@@ -118,6 +155,8 @@
                    
                             <table class="table" >
                                 <tr>
+                                    <th>Institution</th>
+                                    <th> HighestgGrade</th>
                                     <th> Education Level</th>
                                     <th>Start date</th>
                                     <th> End date</th>
@@ -128,6 +167,8 @@
                                 {% for item in educations %}
 
                                     <tr>
+                                        <td>{{item.InstitutionName}}</td>
+                                        <td>{{item.HighestGrade}}</td>
                                         <td>{{item.EducationLevel}}</td>
                                         <td>{{item.YearStarted}}</td>
                                         <td>{{item.YearEnd}}</td>

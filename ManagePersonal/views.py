@@ -6,15 +6,39 @@ from manageProfile.models import Athlete,Parent,Coach,Official
 from django.utils.dateparse import parse_date
 from datetime import date, datetime
 from django.contrib.auth.decorators import login_required
-from ManagePersonal.models import Persons,Nextofkin,Education,Employment,Doctorsinformation
-
+from ManagePersonal.models import Persons,Nextofkin,Education,Employment,Doctorsinformation,CustomField
+from manageProfile import views 
+from ManagePersonal.validate import calcControlDigit,validateID,getLastDigit
 # Create your views here.
+
+
+
+def checkParent(Person):
+    parent = False
+    
+    try:
+        p = get_object_or_404(Parent, personId = Person)
+        if p:
+            parent = True  
+        else:
+            parent = False   
+    except:
+       parent = False 
+    
+    return parent
+
+
+
+
 @login_required
 def personal(request, id):
+    #request.session['process'] = None
+  
     user = request.user
+    isParent = False
     if request.method == 'GET':
         try:
-            person = get_object_or_404(Persons, user = user)
+            person = get_object_or_404(Persons, user = user) 
             
             p = Persons.objects.get(IdentityNumber = person.IdentityNumber)
             if person:
@@ -23,11 +47,8 @@ def personal(request, id):
                     messages.success(request,f"Dear {person.FirstName} please add your athlate personal information")
                     return render(request,'ManagePersonal/addPersonalInfo.html', {"parent": id})
                     
-                # try:
-                #     parentrof = get_object_or_404(Parent,personId = person)
-                #     return render(request,'manageProfile/Personal.html', {"parent": person.personId})
-                # except:
-                return render(request, 'manageProfile/ChooseProfile.html',{"person":person.personId})
+                isParent =  checkParent(p)
+                return render(request, 'manageProfile/ChooseProfile.html',{"person":person.personId, "isParent":isParent})
                 
                    
             else:
@@ -43,8 +64,46 @@ def personal(request, id):
         
        
         if id != "0":
-            Person = Persons.objects.create(
+            if validateID(request.POST['IdentityNumber']) ==True and calcControlDigit(request.POST['IdentityNumber']) == getLastDigit(request.POST['IdentityNumber']):
                 
+                Person = Persons.objects.create(
+                
+                    IdentityNumber = request.POST['IdentityNumber'],
+                    ethnicity= request.POST["ethnicity"],
+                    FirstName = request.POST['FirstName'],
+                    
+                    Middlename = request.POST["Middlename"],
+                    lastname = request.POST["lastname"],
+                    altcellphone = request.POST["altcellphone"],
+                    altemail = request.POST["altemail"],
+                    physicaladdress1 = request.POST["physicaladdress1"],
+                    physicaladdress2 = request.POST["physicaladdress2"],
+                    shoesize = request.POST["shoesize"],
+                    tracksuitsize = request.POST["tracksuitsize"],
+                    disability = request.POST["disability"],
+                    disabilitydescription = request.POST["disabilitydescription"],
+                    gender = request.POST["gender"],
+                    cellphone = request.POST["cellphone"],
+                
+                )
+            else:
+                messages.error(request,"Id number is not valid please correct and try again")
+                return render(request,'ManagePersonal/addPersonalInfo.html', {"parent": id})
+                
+            p = Persons.objects.get(IdentityNumber = Person.IdentityNumber)
+            ParentPerson = get_object_or_404(Persons, pk = id)
+            
+            #parent = get_object_or_404(Parent, personId = Person)
+            messages.success(request,f"Dear { ParentPerson.FirstName}, Athlate personal information saved successfully please continue adding the required information below")
+            
+            request.session['process'] = "Parent"
+            return redirect('addNextOfKin', PersonId = p.personId)
+            return redirect('creatProfile', id=p.personId, profile="Parent",parent=ParentPerson.personId)
+       
+        else:
+          
+            if validateID(request.POST['IdentityNumber']) ==True and calcControlDigit(request.POST['IdentityNumber']) == getLastDigit(request.POST['IdentityNumber']):
+                Person = Persons.objects.create(
                     IdentityNumber = request.POST['IdentityNumber'],
                     ethnicity= request.POST["ethnicity"],
                     FirstName = request.POST['FirstName'],
@@ -61,36 +120,14 @@ def personal(request, id):
                     disabilitydescription = request.POST["disabilitydescription"],
                     gender = request.POST["gender"],
                     cellphone = request.POST["cellphone"],
-                
+                    
+                    
+                    
                 )
-            p = Persons.objects.get(IdentityNumber = Person.IdentityNumber)
-            ParentPerson = get_object_or_404(Persons, pk = id)
-            
-            #parent = get_object_or_404(Parent, personId = Person)
-            messages.success(request,f"Dear { ParentPerson.FirstName}, Athlate personal information saved successfully please continue adding the required information below")
-            return redirect('creatProfile', id=p.personId, profile="Parent",parent=ParentPerson.personId)
-        else:
-            Person = Persons.objects.create(
-                IdentityNumber = request.POST['IdentityNumber'],
-                ethnicity= request.POST["ethnicity"],
-                FirstName = request.POST['FirstName'],
-                user = user,
-                Middlename = request.POST["Middlename"],
-                lastname = request.POST["lastname"],
-                altcellphone = request.POST["altcellphone"],
-                altemail = request.POST["altemail"],
-                physicaladdress1 = request.POST["physicaladdress1"],
-                physicaladdress2 = request.POST["physicaladdress2"],
-                shoesize = request.POST["shoesize"],
-                tracksuitsize = request.POST["tracksuitsize"],
-                disability = request.POST["disability"],
-                disabilitydescription = request.POST["disabilitydescription"],
-                gender = request.POST["gender"],
-                cellphone = request.POST["cellphone"],
-                
-                
-                
-                )
+            else:
+                messages.error(request,"Id number is not valid please correct and try again")
+                return render(request,'ManagePersonal/addPersonalInfo.html', {"parent": id})
+               
             
             p = Persons.objects.get(IdentityNumber = Person.IdentityNumber)
             if request.POST["email"]:
@@ -307,7 +344,7 @@ def updateNextOfKin(request, kinId, place):
             messages.success(request,f"You have updated the next of kin information successfully")
         else:
             messages.success(request,f"You did not make any change on the information")
-        if place =="OnCReate":   
+        if place =="OnCreate":   
             return redirect('updateNextOfKin', kinId = nextofkin.ID, place=place)
         if place =="OnView":
             return redirect('viewPerson', default = "NextOfKin", AtheId =0 )
@@ -321,10 +358,12 @@ def AddEducation(request, personId):
     
     if request.method =='GET':
         educations =getEducation(person)
+        OnCreate = False
         
+        if len(views.getProfiles(personId,"none")) == 0:
+            OnCreate = True
         
-        
-        return render(request, 'ManagePersonal/AddEducation.html',{"person":person,"educations":educations})
+        return render(request, 'ManagePersonal/AddEducation.html',{"person":person,"educations":educations,"OnCreate":OnCreate})
     
     if request.method == 'POST':
          
@@ -338,7 +377,8 @@ def AddEducation(request, personId):
         
         education = Education.objects.create(
            
-            
+            HighestGrade = request.POST["HighestGrade"],
+            InstitutionName = request.POST["InstitutionName"],
             EducationLevel = request.POST["EducationLevel"],
             SchoolAddress = request.POST["SchoolAddress"],
             YearStarted = request.POST["YearStarted"],
@@ -348,7 +388,7 @@ def AddEducation(request, personId):
             
         )
         
-        messages.success(request,"Education information saved successfully you may proceed to the employment ahead")
+        messages.success(request,"Education information saved successfully")
         
         return redirect('AddEducation',personId=education.personId.personId)
 
@@ -384,6 +424,12 @@ def updateEducation(request, educationId, place):
     if request.method =='POST':
         numUpdates = 0
         completed = False
+        if request.POST["InstitutionName"]:
+            education.InstitutionName = request.POST["InstitutionName"]
+            numUpdates +=1
+        if request.POST["HighestGrade"]:
+            education.HighestGrade = request.POST["HighestGrade"]
+            numUpdates +=1
         if request.POST["EducationLevel"]:
             education.EducationLevel = request.POST["EducationLevel"]
             numUpdates +=1
@@ -468,8 +514,11 @@ def addEmployment(request, personId):
     
     if request.method == 'GET':
         employments = getEmployment(personId=person.personId)
-        print(employments)
-        return render(request, 'ManagePersonal/addEmployment.html', {"person":person, "employments": employments})
+        OnCreate = False
+        
+        if len(views.getProfiles(personId,"none")) == 0:
+            OnCreate = True
+        return render(request, 'ManagePersonal/addEmployment.html', {"person":person, "employments": employments, "OnCreate": OnCreate})
     
     if request.method == 'POST':
         currentlyWorking = False
@@ -566,7 +615,7 @@ def updateEmployment(request, employmentId,place):
         else:
             messages.error(request, "You did not make any changes on the record")
         
-        return redirect('updateEmployment',employmentId=employment.Employment_id)    
+        return redirect('updateEmployment',employmentId=employment.Employment_id, place=place)    
         
         
         
@@ -593,12 +642,12 @@ def removeEmployment(request, employmentId, place):
 #adding the doctors information
 @login_required
 def addDoctor(request, personId):
-
-    person = get_object_or_404(Persons, pk=personId)
     
+    person = get_object_or_404(Persons, pk=personId)
+    prof = checkProfiles(person)
     if request.method == 'GET':
         
-        return render(request, 'ManagePersonal/addDoctor.html')
+        return render(request, 'ManagePersonal/addDoctor.html',{"prof":prof,"person":person})
     
     if request.method =="POST":
         
@@ -677,24 +726,123 @@ def updateDoctor(request, docId,place):
         return redirect('updateDoctor',docId = Doctor.DoctorsId, place = place)
             
 def ToChoose(request, id):
+    user = request.user
+    p = get_object_or_404(Persons,user = user)
+    isParent =  checkParent(p)
     if request.method =='GET':
-        return render(request, 'manageProfile/ChooseProfile.html',{"person":id})  
+        return render(request, 'manageProfile/ChooseProfile.html',{"person":id,"isParent":isParent})  
         
     
     
+   
+#Adding CustomField
+@login_required
+def addCustomField(request, personId, place):
+    user = request.user
+    person = get_object_or_404(Persons, pk = personId)
+    ParentPersonID = 0
+    if request.method == 'GET':
+        fields = getFieds(person)
+        try:
+            if request.session['process']:
+                if request.session["process"] =="Parent":
+                    p = get_object_or_404(Persons, user = user)
+                    ParentPersonID = p.personId
+        except:
+            pass            
+        
+        print(f"Custome fields length: {len(fields)}")
+        
+        return render(request,'ManagePersonal/addCustomField.html',{"person":person,"fields":fields,"place":place, "ParentPersonID":ParentPersonID,"length":len(fields)}) 
+
+    if request.method =='POST':
+        
+        customfeild = CustomField.objects.create(
+            personId = person,
+            FeildName = request.POST["FeildName"],
+            FeildValue = request.POST["FeildValue"],
+            
+        )
+        
+        messages.success(request,"Feild added successsfully you may add more")
+        
+        return redirect('addCustomField', personId, place)
+   
+#getting all cunstom fields
+
+def getFieds(person):
+    fields = []
+    Cs = CustomField.objects.all()
+    for item in Cs:
+        if item.personId == person:
+            fields.append(item)
+    return fields
+    
+  
+  
+#Updating custom fields
+@login_required
+def updateCustomField(request, fieldID, place):
+    customField = get_object_or_404(CustomField, pk = fieldID)
+    
+    if request.method == 'GET':
+        
+        
+        return render(request, 'ManagePersonal/updateCustomField.html', {"customField": customField, "place":place})
+    
+    if request.method == 'POST':
+        numUpdates = 0
+        if request.POST["FeildName"] != customField.FeildName:
+            customField.FeildName = request.POST["FeildName"]
+            numUpdates += 1
+            
+        if request.POST["FeildValue"] != customField.FeildValue:
+            customField.FeildValue = request.POST["FeildValue"]
+            numUpdates += 1
+        if numUpdates > 0:
+            customField.save()
+            messages.success(request, "changes to the field have been made successfully")
+        else:
+            messages.error(request,"You did not make any changes on the record")
+        print("did")
+        return redirect('updateCustomField', fieldID = customField.FeildId,place = request.POST["place"])            
+            
+            
+            
+#removing  CustomField
+def removeCustomField(request, customField, place):
+    
+    f = get_object_or_404(CustomField, pk = customField)
+    personId = f.personId.personId
+    
+    if request.method== 'GET':
+        f.delete()
+        print(f"The plce is {place}")
+        
+        messages.success(request, "Field removed successfully")
+        
+        if place == "OnCreate":
+            return redirect('addCustomField',personId =personId, place=place)
+        if place == "OnView":
+            return redirect('viewPerson',default="Person",AtheId=0)
+    
+            
+            
+     
     
     
+def checkProfiles(person):
+   
+    prof = False
+    p= views.getProfiles(person.personId, "nothing")
+   
+    profNum = 0
+    for item in p:
+        profNum +=1
+    if profNum > 0:
+        prof = True
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    return prof
     
 
         

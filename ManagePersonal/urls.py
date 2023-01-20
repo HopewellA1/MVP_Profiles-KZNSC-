@@ -21,6 +21,18 @@ path('removeEmployment/<employmentId>/<place>', views.removeEmployment, name="re
 path('addDoctor/<personId>', views.addDoctor, name="addDoctor"),
 path('updateDoctor/<docId>/<place>',views.updateDoctor, name="updateDoctor"),
 path('ToChoose/<id>',views.ToChoose, name="ToChoose")
+,path('addCustomField/<personId>/<place>', views.addCustomField, name="addCustomField"),
+path('updateCustomField/<fieldID>/<place>',views.updateCustomField, name="updateCustomField"),
+path('removeCustomField/<customField>/<place>',views.removeCustomField, name="removeCustomField")
+
+
+
+
+
+
+
+
+
 
 
 ]

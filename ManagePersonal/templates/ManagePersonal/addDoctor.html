@@ -28,12 +28,18 @@
 
 {% endfor %}
 {% endif %}
+{% if prof == False %}
+    <a href="{% url 'addCustomField' personId=person.personId place="OnCreate" %}">
+        Skip to the next step
+    </a>
+{% endif %}
 <center>
     <div >
   
         <div>
             <div class="card-body p-4 p-md-5" style="border:solid 1px">
                 <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Please add your current doctors information</h3>
+                <hr/>
                 <form method="post" action"addDoctor">
                     {% csrf_token %}
            

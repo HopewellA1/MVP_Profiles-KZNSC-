@@ -23,6 +23,6 @@ urlpatterns = [
    path('updateAchievement/<id>/<type>/<place>', views.updateAchievement, name="updateAchievement")
    ,path('removeAchievement/<id>/<type>/<place>', views.removeAchievement, name="removeAchievement")
    
-   
+
    
 ]

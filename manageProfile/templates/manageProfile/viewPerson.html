@@ -34,7 +34,17 @@
 {% endif %}
 
 <!---->
+{% if ParentAthlete == True %}
 
+    <div>
+        <p> <b> The information below belongs to the athlete under your name, you can go back to your default profile 
+            <a href="{% url 'viewPerson' default="none"  AtheId=0 %}"> HERE</a></b>
+        </p>
+    </div>
+
+
+
+{% endif %}
     <div class="row container"  style="border:solid;padding:10px; display:flex;flex-direction:row">
         
       
@@ -78,6 +88,11 @@
                 </div>
 
                 <label>Join date: {{DefaultProfile.JoinDate}}</label>
+                <div>
+                        <a class="btn btn-default btn-success"  href="{% url 'ChooseProfile' %}" style="width:inherit;width:100%; background-color:orange;">
+                            Add new profile
+                        </a>
+                </div>
                 <hr/>
                 <div>
                     
@@ -89,11 +104,20 @@
 
                     {% endif %}
                     
+                    {% if ParentAthlete == True %}
+                        href="{% url 'viewPerson' default="Person"  AtheId=DefaultProfile.AthleteID %}"
+                        
+
+                    {% else %}
                     
-                    href="{% url 'viewPerson' default="Person"  AtheId=0 %}">
-                        <h3><b>Personal Information</b></h3>
-                    </a>
+                    
+                        href="{% url 'viewPerson' default="Person"  AtheId=0 %}"
+                          
+                    {% endif %}>
+                    <h3><b>Personal Information</b></h3>
+                </a>
                 </div>
+               
                 <br/>
                 <div>
                     
@@ -104,9 +128,15 @@
                         style="width:100%; padding:1rem;"
 
                     {% endif %}
+
+                    {% if ParentAthlete == True %}
+                        href="{% url 'viewPerson' default="Education"  AtheId=DefaultProfile.AthleteID %}"
+                    {% else %}
                     
+                        href="{% url 'viewPerson' default="Education"  AtheId=0 %}"
+                    {% endif %}
                     
-                    href="{% url 'viewPerson' default="Education"  AtheId=0 %}">
+                    >
                         <h3><b>Education</b></h3>
                     </a>
                 </div>
@@ -122,8 +152,13 @@
 
                     {% endif %}
                     
+                    {% if ParentAthlete == True %}
+                        href="{% url 'viewPerson' default="Employment"  AtheId=DefaultProfile.AthleteID %}"
+                    {% else %}
                     
-                    href="{% url 'viewPerson' default="Employment"  AtheId=0 %}">
+                    href="{% url 'viewPerson' default="Employment"  AtheId=0 %}"
+                    {% endif %}
+                    >
                         <h3><b>Employment</b></h3>
                     </a>
                 </div>
@@ -139,8 +174,14 @@
 
                     {% endif %}
                     
+                    {% if ParentAthlete == True %}
+                    href="{% url 'viewPerson' default="NextOfKin"  AtheId=DefaultProfile.AthleteID %}"
+
+                    {% else %}
                     
-                    href="{% url 'viewPerson' default="NextOfKin"  AtheId=0 %}">
+                        href="{% url 'viewPerson' default="NextOfKin"  AtheId=0 %}"
+                    {% endif %}
+                    >
                         <h3><b>Next of kin</b></h3>
                     </a>
                 </div>
@@ -150,7 +191,7 @@
             
                 <div  
                 {% if Default == "Person" %}
-                     style="border:solid 1px;padding:5px;width:150%" 
+                     style="border:solid 1px;padding:5px;width:inherit;width:150%" 
                 {% else %}
                     style="border:solid 1px;padding:5px;width:100%"
                 {% endif %}>
@@ -340,6 +381,11 @@
 
 
                 {% if Default == "Employment" %}
+                <div>
+                    <a href="{% url 'addEmployment' personId=Person.personId %}">
+                        Add new employment achievement
+                    </a>
+                </div>
 
                 {% if employments %}
                 <div>
@@ -396,28 +442,22 @@
             {% endif %}
 
                 {% endif %}
-
-
-
-
-
-
-
-
-
-
-
-
+               
+                
 
                 {% if Default == "Education" %}
               
-                
+                <div>
+                    <a href="{% url 'AddEducation' personId=Person.personId %}">
+                        Add new Academical achievement
+                    </a>
+                </div>
                           
                 <table class="table" >
                     <tr>
+                        <th> Institution</th>
                         <th> Education Level</th>
-                        <th>Start date</th>
-                        <th> End date</th>
+                       
                         <th> Completed?</th>
                         <th> Action</th>
                     </tr>
@@ -425,10 +465,10 @@
                     {% for item in eds %}
 
                         <tr>
+                            <td>{{item.InstitutionName}}</td>
                             <td>{{item.EducationLevel}}</td>
-                            <td>{{item.YearStarted}}</td>
-                            <td>{{item.YearEnd}}</td>
-
+                            
+                         
                             <td>{{item.Completed}}</td>
                             <td>
                                 <a href="{% url 'updateEducation' educationId=item.education_id  place="OnView" %}" >Edit</a> |
@@ -439,7 +479,7 @@
 
                     {% endfor %}
                 </table>
-
+                
              
               
                 <br/>
@@ -452,7 +492,9 @@
 
 
                 {% if Default == "Person" %}
-
+<!--
+    
+-->
                 <div class="container" style="display:flex;flex-direction:column; width:100%;padding:0rem">
                     <div style="display:flex;flex-direction:row;justify-content:center; padding:1rem">
                         <label class="form-label" style="width:20%;"><b>First name</b></label>
@@ -791,7 +833,13 @@
     {% if Default == "Parent" %}
     <hr/>
         <div style="border:solid 1px;">
-                <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Athlets under your profile</h3>
+                <div>
+                    <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Athlets under your profile</h3>
+                    <div>
+                        <a href="{% url 'personal' id=Person.personId %}">
+                            Add new Athlete under your profile
+                        </a>
+                </div>
                 <hr/>
                 <div style="overflow:hodden; overflow-y:scroll; overflow-y auto;overflow-x:hidden;widh:100%; ">
                     
@@ -861,6 +909,55 @@
                             </table>
                         </div>
                        
+    {% endif %}
+
+    {% if Default == "Person" %}
+    <br/>
+    <br/>   
+    <div>
+        <h4>
+        <a href="{% url 'addCustomField' personId=Person.personId place="OnView" %}">
+            <b>Add new custom field</b>
+        </a>
+    </h4>
+    </div>
+
+    {% if fields %}
+                        <div>
+                            <hr/>
+                     
+                             
+                            <div>
+                                <h3><b>Additional information</b></h3>
+                            </div>
+                   
+                            <table class="table" >
+                                <tr>
+                                    <th> Feild Name</th>
+                                    <th>Feild Value</th>
+                                    
+                                    <th> Action</th>
+                                </tr>
+                                
+                                {% for item in fields %}
+
+                                    <tr>
+                                        <td>{{item.FeildName}}</td>
+                                        <td>{{item.FeildValue}}</td>
+                      <!---->
+                                        <td>
+                                            <a href="{% url 'updateCustomField' fieldID=item.FeildId place="OnView" %}" >Edit</a> |
+                                            <!--#(request, educationId, place)-->
+                                            <a href="{% url 'removeCustomField' customField=item.FeildId place="OnView" %}" >remove</a>
+                                        </td>
+                                    </tr>
+
+                                {% endfor %}
+                            </table>
+                        </div>
+                       
+                    {% endif %}
+
     {% endif %}
                 
 {% endblock %}

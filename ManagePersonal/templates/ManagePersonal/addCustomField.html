@@ -1,0 +1,167 @@
+{% extends "manageProfile/base.html" %}
+
+{% block content %}
+{% load static %}
+
+
+<style>
+
+    .form-control{
+        border:solid 2px;
+    }
+    .table{
+        width:100%;
+        border:solid 2px;
+    }
+
+</style>
+<hr/>
+{% if messages %}
+{% for message in messages %}
+  <div>
+    <center>
+        <div style="padding:1rem; background-color:green;color:white">
+          <p>
+              <h3><b>{{ message }}</b></h3>
+          </p>
+        </div>
+      </center>
+    </div>
+
+{% endfor %}
+{% endif %}
+
+{% if place == "OnCreate" %}
+
+    {% if request.session.process %}
+        {% if request.session.process == "Parent" %}
+        <a href="{% url 'creatProfile'  id=person.personId profile="Parent" parent=ParentPersonID%}">
+            Proceed to the step
+        </a>
+        {% endif %}
+
+    {% else %}
+
+        <a href="{% url 'ToChoose'  id=person.personId %}">
+            Proceed to the step
+        </a>
+    {% endif %}
+
+{% endif %}
+<center>
+    <div >
+  
+        <div>
+            <div class="card-body p-4 p-md-5" style="border:solid 1px">
+                <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">You may add any addition information you may have</h3>
+                <hr/>       
+                <form method="post" action"addCustomField">
+                    {% csrf_token %}
+                    <!--ethnicity-->
+                  
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                            <div class="form-outline">
+                              
+                                <input type="text" name="FeildName" placeholder="Feild Name"  class="form-control form-control-lg">
+                                <label class="form-label" for="FeildName">Feild Name</label>
+                         
+                            </div>
+        
+                        </div>
+      
+                       
+                       
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline" style="display:flex;flex-direction: column">
+                            
+                            <input type="text" name="FeildValue" placeholder="Feild Value"  class="form-control form-control-lg">
+                            <label class="form-label" for="FeildValue">Feild Value</label>
+                         
+                        </div>
+        
+                        </div>
+                    </div>
+    
+    
+    
+                    
+                    <br/>
+
+                    {% if length < 10 %}
+                        <input class="btn btn-default btn-primary" style="width:100%" type="submit" value="Save information"/>
+                    {% else %}
+                    <div disabled    class="btn btn-default btn-primary " style="width:100%;background-color:red;height:60px;border:solid 3px orange; padding:1rem">
+                       
+                                You are not allowed to have more than 10 custome values
+                    </div>
+                    {% endif %}
+                    {% if fields %}
+                        <div>
+                            <hr/>
+                            {% if request.session.process %}
+                            {% if request.session.process == "Parent" %}
+                            <a class="btn btn-default btn-primary" style="width:100%;background-color:green" href="{% url 'creatProfile'  id=person.personId profile="Parent" parent=ParentPersonID%}">
+                                Proceed to the step
+                            </a>
+                            {% endif %}
+                    
+                        {% else %}
+                                {% if place == "OnCreate"%}
+                                    <a href="{% url 'ToChoose'  id=person.personId %}" class="btn btn-default btn-primary" style="width:100%;background-color:green">
+                                        Continue to the next step
+                                    </a>
+                                {% endif %}
+                                {% if place == "OnView" %}
+
+                                <a href="{% url 'viewPerson'  default="Person" AtheId=0 %}" class="btn btn-default btn-primary" style="width:100%;background-color:green">
+                                    Back
+                                </a>
+
+                                {% endif %}
+                        {% endif %}
+                                <hr/>
+                            <div>
+                                <h3><b>Additional information</b></h3>
+                            </div>
+                   
+                            <table class="table" >
+                                <tr>
+                                    <th> Feild Name</th>
+                                    <th>Feild Value</th>
+                                    
+                                    <th> Action</th>
+                                </tr>
+                                
+                                {% for item in fields %}
+
+                                    <tr>
+                                        <td>{{item.FeildName}}</td>
+                                        <td>{{item.FeildValue}}</td>
+                      <!---->
+                                        <td>
+                                            <a href="{% url 'updateCustomField' fieldID=item.FeildId place=place %}" >Edit</a> |
+                                            <!--#(request, educationId, place)-->
+                                            <a href="{% url 'removeCustomField' customField=item.FeildId place=place %}" >remove</a>
+                                        </td>
+                                    </tr>
+
+                                {% endfor %}
+                            </table>
+                        </div>
+                       
+                    {% endif %}
+                
+                </form>
+                
+            </div>
+            
+        </div>
+    </div>
+</center>
+
+
+{% endblock %}

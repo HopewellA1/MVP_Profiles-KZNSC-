@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Persons(models.Model):
-    personId = models.IntegerField(primary_key=True, blank=False,null=False,auto_created=True)
+    personId = models.AutoField(primary_key=True, blank=False,null=False,auto_created=True)
     IdentityNumber = models.CharField(db_column='IdentityNumber', max_length=13) 
     FirstName = models.CharField(db_column='FirstName', max_length=50)  
     Middlename = models.CharField(db_column='MiddleName', max_length=50)  
@@ -13,7 +13,7 @@ class Persons(models.Model):
     physicaladdress1 = models.CharField(db_column='PhysicalAddress1', max_length=100) 
     physicaladdress2 = models.CharField(db_column='PhysicalAddress2', max_length=100)  
     shoesize = models.IntegerField(db_column='ShoeSize', blank=True, null=True)  
-    tracksuitsize = models.IntegerField(db_column='TrackSuitSize', blank=True, null=True)
+    tracksuitsize = models.CharField(db_column='TrackSuitSize', blank=True, null=True, max_length=50)
     disability = models.CharField(db_column='Disability', max_length=100)  
     disabilitydescription = models.CharField(db_column='DisabilityDescription', max_length=300) 
     gender = models.CharField(db_column='Gender', max_length=20)  
@@ -53,7 +53,8 @@ class Education(models.Model):
     education_id = models.AutoField(db_column='Education_Id', primary_key=True) 
     EducationLevel = models.CharField(db_column='EducationLevel', max_length=50)  
     SchoolAddress = models.CharField(db_column='SchoolAddress', max_length=50)  
-    
+    HighestGrade = models.CharField(db_column='HighestGrade', max_length=50, default="none")
+    InstitutionName = models.CharField(max_length=70, default="Unknown school")
     YearStarted = models.DateField(db_column='YearStarted', blank=True, null=True)  
     YearEnd = models.DateField(db_column='YearEnd', blank=True, null=True)  
     Completed = models.BooleanField(db_column='Completed',default=False) 
@@ -96,3 +97,12 @@ class Doctorsinformation(models.Model):
     class Meta:
        
         db_table = 'DoctorsInformation'
+        
+class CustomField(models.Model):
+    FeildId = models.AutoField(db_column='FeildId', primary_key=True)
+    personId = models.ForeignKey(Persons,on_delete=models.CASCADE) 
+    FeildName = models.CharField(db_column='FeildName', max_length=50)
+    FeildValue =models.TextField(db_column='FeildValue',max_length=100)
+    class Meta:
+       
+        db_table = 'CustomField'

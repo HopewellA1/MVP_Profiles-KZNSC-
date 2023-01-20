@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from .serialization import Serializationclass
 from rest_framework import generics,filters#,viewsets
 from rest_framework.response import Response
-from ManagePersonal.views import getEducation,getEmployment
+from ManagePersonal.views import getEducation,getEmployment,checkParent, getFieds
 from ManagePersonal.models import Persons,Nextofkin,Education,Employment,Doctorsinformation
 
 
@@ -20,37 +20,36 @@ def home(request):
         if request.user:
             user = request.user
             try:
-                person = get_object_or_404(Persons)
+                person = get_object_or_404(Persons,user = user)
             except:
                 pass
         
         return render(request,'manageProfile/home.html',{"person":person})
-    if request.method == 'POST':
-        Person = Persons.objects.create(IdentityNumber = request.POST['IdentityNumber'],FirstName = request.POST['FirstName'])
-        p = Persons.objects.get(IdentityNumber = Person.IdentityNumber)
+    # if request.method == 'POST':
+    #     Person = Persons.objects.create(IdentityNumber = request.POST['IdentityNumber'],FirstName = request.POST['FirstName'])
+    #     p = Persons.objects.get(IdentityNumber = Person.IdentityNumber)
         
-        print(p.personId)
-        if request.POST["parent"]:
-            ParentPerson = get_object_or_404(Persons, pk = request.POST['person'])
-            #parent = get_object_or_404(Parent, personId = Person)
-            messages.success(f"Dear { ParentPerson.FirstName}, Athlate personal information saved successfully please continue adding the required information below")
-            return redirect('creatProfile', id=Person.personId, profile="Parent")
+    #     print(p.personId)
+    #     if request.POST["parent"]:
+    #         ParentPerson = get_object_or_404(Persons, pk = request.POST['person'])
+    #         #parent = get_object_or_404(Parent, personId = Person)
+    #         messages.success(f"Dear { ParentPerson.FirstName}, Athlate personal information saved successfully please continue adding the required information below")
+    #         return redirect('creatProfile', id=Person.personId, profile="Parent")
             
             
-        return render(request, 'manageProfile/ChooseProfile.html',{"person": p.personId})
+    #     return render(request, 'manageProfile/ChooseProfile.html',{"person": p.personId})
 @login_required
 def chooseProfile(request):
+    user = request.user
+    p = get_object_or_404(Persons, user = user)
+    isParent =  checkParent(p)
     if request.method == 'GET':
-        return render(request, 'manageProfile/ChooseProfile.html')
-    if request.method == 'POST':
-
-        Person = get_object_or_404(Persons, pk = request.POST['person'])
-        return redirect('creatProfile', id=Person.personId, profile="Athlate")
-       # return render(request, 'manageProfile/CreateProfile.html',{"person": Person.personId})
+        return render(request, 'manageProfile/ChooseProfile.html',{"isParent":isParent,"person":p.personId,"p":p})
+    
 @login_required
 def creatProfile(request,id, profile, parent):
     prof =''
-     
+    
     if request.method =="GET":
         try:
             #if a person alredy has that profile we will let them know
@@ -58,11 +57,18 @@ def creatProfile(request,id, profile, parent):
                 prof = Athlete.objects.get(personId = id)
             if profile =="Parent":
                 prof = Parent.objects.get(personId = id)
+                messages.success(request,f"Dear { prof.personId.FirstName}, Athlate personal information saved successfully please continue adding the required information below")
+            
                 
         except:
             # if they don't have any of the above we let them continue to create
             pass
-
+        if request.session['process']:
+            if request.session["process"] =="Parent":
+                print(f"the parnt is: {parent}")
+                p = get_object_or_404(Persons, pk = parent)
+                messages.success(request,f"Dear , {p.FirstName} Athlate personal information saved successfully please continue adding the required information below")
+            
         return render(request, 'manageProfile/CreateProfile.html',{"profile":prof, "parent":parent})
     if request.method=='POST':
         
@@ -106,9 +112,9 @@ def creatProfile(request,id, profile, parent):
         Person.NumProfile += 1
         Person.save()
 
-     
-        if profile =="Athlate":
-                prof = Athlete.objects.get(personId = id)
+        request.session['process'] = None
+        
+        prof = Athlete.objects.get(personId = Person)
 
 
        # person = Persons.objects.get()
@@ -280,21 +286,28 @@ def viewPerson(request, default,AtheId):
     #Official
     #Person
     #
+    user = request.user
+    ParentAthlete = False
+    AllAchievements = []
     if request.method == 'GET':
         Athletes = []
         Default = ""
-        user = request.user
+        
         numProf = 0
+        education =""
         allPersonProfiles = []
-        if default == "ParentAthlete":
+        if default == "ParentAthlete" or int(AtheId) > 0:
             AthleteProfile = get_object_or_404(Athlete,pk =AtheId)
             personalinfo = AthleteProfile.personId
             eds = getEducation(personalinfo)
             employments = getEmployment(personId=personalinfo.personId) 
             nextOfKin = get_object_or_404(Nextofkin, personId = personalinfo.personId)
+            ParentAthlete = True
+            
+            
         else:
             personalinfo = get_object_or_404(Persons, user = user)
-            education =""
+          
             eds = getEducation(personalinfo)
             employments = getEmployment(personId=personalinfo.personId) 
             nextOfKin = get_object_or_404(Nextofkin, personId = personalinfo.personId)
@@ -302,7 +315,7 @@ def viewPerson(request, default,AtheId):
                 education = get_object_or_404(Education,personId = personalinfo)
             except:
                 pass
-       
+        
         # getting all profile belonging to the person using try 
         try:
             #starting with parent profile
@@ -366,7 +379,7 @@ def viewPerson(request, default,AtheId):
             pass
         except:
             pass
-        
+        print(f"Default is : {Default}")
         try:
             #fight goes on we on Coach profile
             coachProfile = get_object_or_404(Coach,personId = personalinfo)
@@ -403,15 +416,18 @@ def viewPerson(request, default,AtheId):
             AllAchievements = getAchievement(officialProfile.OfficialID,Default)
         except:
             pass
-        print(f"Number of profiles: {numProf}")
-            
+        
+        fields = []     
         for item in allPersonProfiles:
          
          
             if item["type"] == default:
                 
             
-                AllAchievements = getAchievement(item["id"],item["type"])
+                if default == "Parent":
+                    AllAchievements = []
+                else:
+                    AllAchievements = getAchievement(item["id"],item["type"])
                 return render(request, 'manageProfile/viewPerson.html',
                     {
                          "Person":personalinfo,
@@ -422,19 +438,26 @@ def viewPerson(request, default,AtheId):
                          "education":education,
                          "eds":eds,
                          "employments":employments,
-                         "AllAchievements":AllAchievements
+                         "AllAchievements":AllAchievements,
+                         "ParentAthlete":ParentAthlete
                       
                          
                     }) 
-         #NextOfKin       
+         #NextOfKin  
+           
         if default == "Person":
+            fields =getFieds(personalinfo)
             Default =  default
+            AllAchievements =[]
         if default == "Education":
             Default = default
+            AllAchievements =[]
         if default == "Employment":
             Default = default
+            AllAchievements =[]
         if default == "NextOfKin":
             Default = default
+            AllAchievements =[]
         return render(request, 'manageProfile/viewPerson.html',
                         {"Person":personalinfo,
                          "DefaultProfile": DefaultProfile,
@@ -445,7 +468,9 @@ def viewPerson(request, default,AtheId):
                          "eds":eds,
                          "employments":employments,
                          "nextofkin":nextOfKin,
-                         "AllAchievements":AllAchievements
+                         "AllAchievements":AllAchievements,
+                         "ParentAthlete":ParentAthlete,
+                         "fields":fields
                          })
        
             
@@ -648,7 +673,7 @@ def updateParent(request, parentId):
         
         return redirect('updateParent', parentId=parentProfile.ParentId)
     
-    
+
 def getProfiles(Personid,remove):
     
     profiles =[]
