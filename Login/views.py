@@ -63,11 +63,13 @@ def register(request):
                                                 email= email
                                                 )
                     reg.save()
-                    try:
-                        print(ActivationEmail(request, user, request.POST['email'].lower()))
-                    except:
-                        messages.error(request,"Could not send email due lack of conection")
-                    return redirect('home')
+                    messages.warning(request, "Email not configured on the backend, the account must be activated from the admin page")
+                  #  try:
+                  
+                    #print(ActivationEmail(request, user, request.POST['email'].lower())) this is the method configured in google gmail see settings.py
+                    #except:
+                       # messages.error(request,"Could not send email due lack of conection")
+                    #return redirect('home')
                 except IntegrityError:
                     messages.error(request, f"Email Already in use, if it's you can login or reset your password if forgotten")           
                 
@@ -188,7 +190,10 @@ def ResetEmail(request, user, to_email):
         print("Sent")
         return messages.success(request,f"An email is sent to {to_email}, which has the access to resert you password.")
     else:
-        return messages.error(request, f"There was an erroe sening verification email, please ensure you enter the correct email")
+        messages.warning(request, "PLEAS NOTE: Email not configured on the backend, the account must be activated from the admin page")
+        
+        return messages.error(request, f"There was an error sending verification email, please ensure you enter the correct email")
+        
 #page for requesting a link to reset password 
 def password_reset_request(request):
 
