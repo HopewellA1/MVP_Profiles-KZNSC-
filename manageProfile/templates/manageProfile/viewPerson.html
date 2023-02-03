@@ -621,6 +621,9 @@
 
                 {% if Default == "Athlete" %}
                     <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Now viewing athlate profile</h3>
+                    <hr/>
+                    <a href="{% url 'ChooseFederation' %}" class="btn btn-primary btn-lg" type="submit"  style="width:100%" >Join a club</a>       
+                       
                     <form method="POST" action="ViewInformation" enctype="multipart/form-data">
                     {% csrf_token %}
 

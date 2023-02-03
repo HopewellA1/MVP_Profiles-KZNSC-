@@ -21,7 +21,9 @@ urlpatterns = [
    
    path('addAchievements/<profileId>/<type>/<place>',views.addAchievements,name="addAchievements"),
    path('updateAchievement/<id>/<type>/<place>', views.updateAchievement, name="updateAchievement")
-   ,path('removeAchievement/<id>/<type>/<place>', views.removeAchievement, name="removeAchievement")
+   ,path('removeAchievement/<id>/<type>/<place>', views.removeAchievement, name="removeAchievement"),
+   path('ChooseFederation', views.ChooseFederation, name ="ChooseFederation"),
+   path('ChooseClub', views.ChooseClub, name="ChooseClub")
    
 
    

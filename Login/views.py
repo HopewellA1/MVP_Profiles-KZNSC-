@@ -73,7 +73,7 @@ def register(request):
                 except IntegrityError:
                     messages.error(request, f"Email Already in use, if it's you can login or reset your password if forgotten")           
                 
-                    return render(request,'Login/html screens/register.html')
+                return render(request,'Login/html screens/register.html')
             else:
                 messages.error(request,f"Passwords did not match, please try again")           
                 

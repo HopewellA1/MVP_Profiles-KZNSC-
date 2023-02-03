@@ -83,13 +83,13 @@ DATABASES = {
         
         
         
-        
+        #MySQL config
         #   'ENGINE': 'django.db.backends.mysql',
-        #   'NAME': 'yonela_db',
-        #   'HOST': 'db-mysql-blr1-14215-do-user-10267234-0.b.db.ondigitalocean.com',
-        #   'USER': 'intern_user',
-        #   'PASSWORD': 'AVNS_UU_kssk63vKSWaU',
-        #   'PORT': '25060',
+        #   'NAME': 'Name_db',
+        #   'HOST': '',
+        #   'USER': '',
+        #   'PASSWORD': '',
+        #   'PORT': '',
         #   'OPTIONS': {
         #       'init_command':"SET sql_mode= 'STRICT_TRANS_TABLES'"}
         

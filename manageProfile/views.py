@@ -1121,3 +1121,20 @@ def removeAchievement(request, id, type,place):
         if place =="OnView":
             return redirect('viewPerson', default =type,AtheId =0)
         
+        
+        
+        
+def ChooseFederation(request):
+    
+    if request.method =='GET':
+        messages.success(request,"Choose the federation at which your new club belongs")
+        
+        return render(request, 'manageProfile/ChooseFederation.html')
+    
+    
+def ChooseClub(request):
+    
+    if request.method =='GET':
+       
+        return render(request,'manageProfile/ChooseClub.html')
+        
